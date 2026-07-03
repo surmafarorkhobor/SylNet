@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SylNet | আপনার ডিজিটাল ঘর</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page-wrap">
 
     <header class="app-header">
-        <div class="logo"><strong>SylNet</strong></div>
+        <div class="logo">SylNet<span class="slogan">আমরা হখল ছিলটি</span></div>
         <nav class="top-nav">
             <span>🔍</span>
             <span>💬</span>
@@ -18,33 +21,68 @@
     </header>
 
     <main class="container">
-        
+
         <div class="card post-input-box">
             <div class="user-avatar">👤</div>
-            <input type="text" placeholder="নয়া কিতা অইলো?">
+            <input type="text" placeholder="নয়া কিতা অইলো?">
+        </div>
+
+        <a href="news.html" class="news-strip">
+            <span class="tag">খবর</span>
+            <span>শুরমাফারর খবর: সিলেটে আজ হালকা বৃষ্টির সম্ভাবনা</span>
+        </a>
+
+        <div class="chip-rail">
+            <div class="chip active">ফেঞ্চুগঞ্জ ইউনিয়ন</div>
+            <div class="chip">সিলেট জেলা</div>
+            <div class="chip">প্রবাসী মজলিস</div>
         </div>
 
         <div class="card post">
-            <div class="user-name">আব্দুর রাজ্জাক</div>
-            <p>আজকের আবহাওয়াটা বেশ সুন্দর।</p>
+            <div class="post-head">
+                <div class="user-avatar">র</div>
+                <div class="meta">
+                    <div class="user-name">আব্দুর রাজ্জাক <span class="badge">যাচাইকৃত</span></div>
+                    <div class="post-time">২ ঘন্টা আগে</div>
+                </div>
+            </div>
+            <p>আজকের আবহাওয়াটা বেশ সুন্দর।</p>
             <div class="post-actions">
-                <span>👍 ফছন অইছে</span> | <span>💬 মতামত</span>
+                <span>👍 ফছন অইছে</span>
+                <span>💬 মতামত</span>
+                <span>↗️ শেয়ার</span>
             </div>
         </div>
 
         <div class="card post">
-            <div class="user-name">আরিফ চৌধুরী</div>
-            <p>সিলেটের চা বাগানের দৃশ্যগুলো সব সময় মন ভালো করে দেয়।</p>
+            <div class="post-head">
+                <div class="user-avatar">আ</div>
+                <div class="meta">
+                    <div class="user-name">আরিফ চৌধুরী</div>
+                    <div class="post-time">৪ ঘন্টা আগে</div>
+                </div>
+            </div>
+            <p>সিলেটের চা বাগানের দৃশ্যগুলো সব সময় মন ভালো করে দেয়।</p>
             <div class="post-actions">
-                <span>👍 ফছন অইছে</span> | <span>💬 মতামত</span>
+                <span>👍 ফছন অইছে</span>
+                <span>💬 মতামত</span>
+                <span>↗️ শেয়ার</span>
             </div>
         </div>
 
         <div class="card post">
-            <div class="user-name">সাফিয়া বেগম</div>
+            <div class="post-head">
+                <div class="user-avatar">ছ</div>
+                <div class="meta">
+                    <div class="user-name">সাফিয়া বেগম</div>
+                    <div class="post-time">গতকাল</div>
+                </div>
+            </div>
             <p>নতুন একটি সিলেটী কবিতার বই কিনলাম আজ, খুব ভালো লাগছে।</p>
             <div class="post-actions">
-                <span>👍 ফছন অইছে</span> | <span>💬 মতামত</span>
+                <span>👍 ফছন অইছে</span>
+                <span>💬 মতামত</span>
+                <span>↗️ শেয়ার</span>
             </div>
         </div>
 
@@ -57,6 +95,9 @@
         <a href="news.html">🔔 খবর</a>
         <a href="more.html">☰ আরও</a>
     </nav>
+
+</div>
+<script src="app.js"></script>
 <script>
     window.onload = function() {
         const savedPost = localStorage.getItem('myNewPost');
@@ -65,16 +106,24 @@
             const newCard = document.createElement('div');
             newCard.className = 'card post';
             newCard.innerHTML = `
-                <div class="user-name">আপনি (এখনই)</div>
+                <div class="post-head">
+                    <div class="user-avatar">👤</div>
+                    <div class="meta">
+                        <div class="user-name">আপনি (এখনই)</div>
+                        <div class="post-time">এইমাত্র</div>
+                    </div>
+                </div>
                 <p>${savedPost}</p>
                 <div class="post-actions">
-                    <span>👍 ফছন অইছে</span> | <span>💬 মতামত</span>
+                    <span>👍 ফছন অইছে</span>
+                    <span>💬 মতামত</span>
+                    <span>↗️ শেয়ার</span>
                 </div>
             `;
-            postContainer.insertBefore(newCard, postContainer.children[1]);
+            postContainer.insertBefore(newCard, postContainer.children[3]);
+            localStorage.removeItem('myNewPost');
         }
     };
 </script>
-
 </body>
 </html>
