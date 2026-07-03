@@ -57,6 +57,24 @@
         <a href="news.html">🔔 খবর</a>
         <a href="more.html">☰ আরও</a>
     </nav>
+<script>
+    window.onload = function() {
+        const savedPost = localStorage.getItem('myNewPost');
+        if (savedPost) {
+            const postContainer = document.querySelector('.container');
+            const newCard = document.createElement('div');
+            newCard.className = 'card post';
+            newCard.innerHTML = `
+                <div class="user-name">আপনি (এখনই)</div>
+                <p>${savedPost}</p>
+                <div class="post-actions">
+                    <span>👍 ফছন অইছে</span> | <span>💬 মতামত</span>
+                </div>
+            `;
+            postContainer.insertBefore(newCard, postContainer.children[1]);
+        }
+    };
+</script>
 
 </body>
 </html>
