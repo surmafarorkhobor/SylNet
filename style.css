@@ -1,0 +1,73 @@
+:root {
+    --primary-color: #0A8F5A;
+    --bg-color: #F7F9FB;
+    --text-color: #202124;
+    --card-bg: #FFFFFF;
+    --radius: 18px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-color);
+    font-family: sans-serif;
+    color: var(--text-color);
+    padding-bottom: 70px;
+}
+
+.app-header {
+    background: var(--card-bg);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.container { padding: 20px; }
+
+/* কার্ড স্টাইল */
+.card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: var(--radius);
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.post-input-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.post-input-box input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #555;
+}
+
+/* নেভিগেশন */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 5px;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+}
