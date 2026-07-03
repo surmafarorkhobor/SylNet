@@ -4,27 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মজলিস | SylNet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page-wrap">
+
     <header class="app-header">
-        <div class="logo"><strong>মজলিস</strong></div>
+        <div class="logo">মজলিস<span class="slogan">নিজর এলাকার মানুষ খুঁজি নাও</span></div>
         <nav class="top-nav">
             <span>🔍</span>
-            <span>💬</span>
             <a href="profile.html">👤</a>
         </nav>
     </header>
 
     <main class="container">
-        <div class="card">
-            <h3>জনপ্রিয় মজলিসসমূহ</h3>
-            <ul class="menu-list">
-                <li>১. সাহিত্য ও কবিতা</li>
-                <li>২. প্রযুক্তি ও কোডিং</li>
-                <li>৩. সিলেটী সংস্কৃতি</li>
-            </ul>
+
+        <div class="chip-rail">
+            <div class="chip active">ইউনিয়ন</div>
+            <div class="chip">উপজেলা</div>
+            <div class="chip">জেলা</div>
+            <div class="chip">প্রবাসী</div>
+            <div class="chip">Business</div>
+            <div class="chip">Student</div>
         </div>
+
+        <div class="card">
+            <h3>জনপ্রিয় মজলিসসমূহ</h3>
+            <div class="majlis-item">
+                <div class="majlis-icon">🏠</div>
+                <div class="info">
+                    <div class="name">ফেঞ্চুগঞ্জ ইউনিয়ন মজলিস</div>
+                    <div class="members">১২,৪০০ জন সদস্য</div>
+                </div>
+                <button class="join-btn joined">✅ যোগ দিছি</button>
+            </div>
+            <div class="majlis-item">
+                <div class="majlis-icon">📚</div>
+                <div class="info">
+                    <div class="name">সাহিত্য ও কবিতা</div>
+                    <div class="members">৩,৮০০ জন সদস্য</div>
+                </div>
+                <button class="join-btn">যোগ দাও</button>
+            </div>
+            <div class="majlis-item">
+                <div class="majlis-icon">💻</div>
+                <div class="info">
+                    <div class="name">প্রযুক্তি ও কোডিং</div>
+                    <div class="members">২,১৫০ জন সদস্য</div>
+                </div>
+                <button class="join-btn">যোগ দাও</button>
+            </div>
+            <div class="majlis-item">
+                <div class="majlis-icon">🎭</div>
+                <div class="info">
+                    <div class="name">সিলেটী সংস্কৃতি</div>
+                    <div class="members">৬,৯০০ জন সদস্য</div>
+                </div>
+                <button class="join-btn">যোগ দাও</button>
+            </div>
+            <div class="majlis-item">
+                <div class="majlis-icon">✈️</div>
+                <div class="info">
+                    <div class="name">প্রবাসী মজলিস — সৌদি আরব</div>
+                    <div class="members">২১,৩০০ জন সদস্য</div>
+                </div>
+                <button class="join-btn">যোগ দাও</button>
+            </div>
+        </div>
+
     </main>
 
     <nav class="bottom-nav">
@@ -34,5 +83,8 @@
         <a href="news.html">🔔 খবর</a>
         <a href="more.html">☰ আরও</a>
     </nav>
+
+</div>
+<script src="app.js"></script>
 </body>
 </html>
