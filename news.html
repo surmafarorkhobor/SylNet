@@ -4,22 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>খবর | SylNet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page-wrap">
+
     <header class="app-header">
-        <div class="logo"><strong>খবর</strong></div>
+        <div class="logo">খবর<span class="slogan">শুরমাফারর খবর</span></div>
+        <nav class="top-nav">
+            <a href="index.html">🏠</a>
+        </nav>
     </header>
 
     <main class="container">
         <div class="card">
             <div class="news-item">
+                <span class="news-source">Surma Faror Khobor · আজ</span>
                 <div class="news-title">সকালের আপডেট: সিলেটে বৃষ্টির সম্ভাবনা</div>
-                <p>আবহাওয়ার পূর্বাভাস অনুযায়ী আজ সিলেটে হালকা বৃষ্টির সম্ভাবনা রয়েছে।</p>
+                <p>আবহাওয়ার পূর্বাভাস অনুযায়ী আজ সিলেটে হালকা বৃষ্টির সম্ভাবনা রয়েছে।</p>
             </div>
             <div class="news-item">
-                <div class="news-title">নতুন বইমেলা বিষয়ক আলোচনা</div>
-                <p>সাহিত্য মজলিসে আগামী সপ্তাহের বইমেলা নিয়ে বিশেষ আড্ডা হবে।</p>
+                <span class="news-source">Surma Faror Khobor · গতকাল</span>
+                <div class="news-title">নতুন বইমেলা বিষয়ক আলোচনা</div>
+                <p>সাহিত্য মজলিসে আগামী সপ্তাহের বইমেলা নিয়ে বিশেষ আড্ডা হবে।</p>
+            </div>
+            <div class="news-item">
+                <span class="news-source">Surma Faror Khobor · ২ দিন আগে</span>
+                <div class="news-title">বিয়ানীবাজারে নয়া রাস্তা উদ্বোধন</div>
+                <p>এলাকাবাসীর দীর্ঘদিনের দাবির প্রেক্ষিতে অবশেষে রাস্তার কাজ সম্পন্ন হলো।</p>
             </div>
         </div>
     </main>
@@ -31,5 +45,8 @@
         <a href="news.html">🔔 খবর</a>
         <a href="more.html">☰ আরও</a>
     </nav>
+
+</div>
+<script src="app.js"></script>
 </body>
 </html>
