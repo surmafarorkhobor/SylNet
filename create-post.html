@@ -13,9 +13,9 @@
 
     <main class="container">
         <div class="card">
-            <textarea placeholder="আপনার মনের কথা এখানে লিখুন..."></textarea>
+            <textarea id="postText" placeholder="আপনার মনের কথা এখানে লিখুন..." style="width: 100%; height: 100px;"></textarea>
             <br><br>
-            <button>পোস্ট করুন</button>
+            <button onclick="savePost()" style="width: 100%; padding: 10px; cursor: pointer;">পোস্ট করুন</button>
         </div>
     </main>
 
@@ -26,5 +26,19 @@
         <a href="news.html">🔔 খবর</a>
         <a href="more.html">☰ আরও</a>
     </nav>
+
+    <script>
+        function savePost() {
+            const text = document.getElementById('postText').value;
+            if (text.trim() !== "") {
+                // পোস্টটি ব্রাউজারের মেমোরিতে সেভ হচ্ছে
+                localStorage.setItem('myNewPost', text);
+                // সেভ হওয়ার পর হোম পেজে চলে যাবে
+                window.location.href = 'index.html';
+            } else {
+                alert('দয়া করে কিছু লিখুন!');
+            }
+        }
+    </script>
 </body>
 </html>
