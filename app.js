@@ -66,6 +66,61 @@ const sylnetNewsData = {
     }
 };
 
+// ---------- মজলিস গ্রুপের তথ্য (majlis-detail.html ও search.html-এর জন্য) ----------
+const sylnetMajlisData = {
+    'm1': {
+        name: 'ফেঞ্চুগঞ্জ ইউনিয়ন মজলিস',
+        icon: '🏠',
+        members: '১২,৪০০',
+        joined: true,
+        description: 'ফেঞ্চুগঞ্জ ইউনিয়নের সবার জন্য নিজস্ব মজলিস — এলাকার খবর, আড্ডা আর একে অপরের খোঁজখবর রাখার জায়গা।',
+        posts: [
+            { author: 'রফিক আহমদ', time: '৩ ঘন্টা আগে', avatarLetter: 'র', text: 'আইজকা ইউনিয়ন পরিষদর সামনে নয়া রাস্তার কাম শুরু অইছে।' },
+            { author: 'ছালমা বেগম', time: 'গতকাল', avatarLetter: 'ছ', text: 'মাইজগাঁও বাজারো আইজকা খুব ভিড় আছিল।' }
+        ]
+    },
+    'm2': {
+        name: 'সাহিত্য ও কবিতা',
+        icon: '📚',
+        members: '৩,৮০০',
+        joined: false,
+        description: 'সিলেটি ও বাংলা সাহিত্য, কবিতা এবং লেখালেখি নিয়ে আলোচনার মজলিস।',
+        posts: [
+            { author: 'আরিফ চৌধুরী', time: '৫ ঘন্টা আগে', avatarLetter: 'আ', text: 'নতুন একটি সিলেটী কবিতার বই পড়লাম, দারুণ লাগলো।' }
+        ]
+    },
+    'm3': {
+        name: 'প্রযুক্তি ও কোডিং',
+        icon: '💻',
+        members: '২,১৫০',
+        joined: false,
+        description: 'প্রোগ্রামিং, সফটওয়্যার এবং প্রযুক্তি নিয়ে আলোচনার জন্য মজলিস।',
+        posts: [
+            { author: 'হাসান আলী', time: '১ দিন আগে', avatarLetter: 'হ', text: 'Flutter দিয়ে অ্যাপ বানানো শিখতেছি, বেশ মজার!' }
+        ]
+    },
+    'm4': {
+        name: 'সিলেটী সংস্কৃতি',
+        icon: '🎭',
+        members: '৬,৯০০',
+        joined: false,
+        description: 'সিলেটি গান, নাটক, ঐতিহ্য আর সংস্কৃতি নিয়ে আলোচনার মজলিস।',
+        posts: [
+            { author: 'নাজমা আক্তার', time: '২ ঘন্টা আগে', avatarLetter: 'ন', text: 'পুরান দিনর সিলেটী গানর একটা অনুষ্ঠান দেখলাম, মন ভরি গেছে।' }
+        ]
+    },
+    'm5': {
+        name: 'প্রবাসী মজলিস — সৌদি আরব',
+        icon: '✈️',
+        members: '২১,৩০০',
+        joined: false,
+        description: 'সৌদি আরব প্রবাসী সিলেটিদের জন্য নিজস্ব মজলিস — দেশের খবর আর প্রবাসের অভিজ্ঞতা শেয়ারের জায়গা।',
+        posts: [
+            { author: 'মিজানুর রহমান', time: '৬ ঘন্টা আগে', avatarLetter: 'ম', text: 'বিদেশ বইয়া থাকিয়াও নিজর এলাকার খবর দেখলে মনে অয় বাড়িত ফিরি আইছি।' }
+        ]
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // নিচের নেভিগেশনে বর্তমান পেজ হাইলাইট করা
@@ -88,13 +143,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // মজলিসে যোগ দেওয়া / ছাড়ার বাটন টগল
-    document.querySelectorAll('.join-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            const joined = btn.classList.toggle('joined');
-            btn.textContent = joined ? '✅ যোগ দিছি' : 'যোগ করো';
-        });
-    });
+    // (মজলিসে যোগ দেওয়া/ছাড়ার বাটন এখন নিচে ইভেন্ট ডেলিগেশন দিয়ে হ্যান্ডেল হয়, যাতে
+    // ডাইনামিকভাবে যোগ হওয়া মজলিস-ডিটেইল পেজেও কাজ করে)
 
     // পেজ লোড হওয়ার সময় প্রতিটা পোস্টের কমেন্ট আর শেয়ার কাউন্ট দেখানো
     document.querySelectorAll('.post[data-post-id]').forEach(function (postEl) {
@@ -258,7 +308,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // ৮) বাইরে ক্লিক করলে সব রিয়েকশন পিকার বন্ধ হয়ে যাবে
+        // ৮) "যোগ করো" বাটন টগল (মজলিস তালিকা, মজলিস-ডিটেইল, বা পিপল সেকশন — সব জায়গায়)
+        const joinBtn = e.target.closest('.join-btn');
+        if (joinBtn) {
+            const joined = joinBtn.classList.toggle('joined');
+            joinBtn.textContent = joined ? '✅ যোগ দিছি' : 'যোগ করো';
+            return;
+        }
+
+        // ৯) মজলিস তালিকায় কোনো গ্রুপে ক্লিক করলে সেই গ্রুপের নিজস্ব ফিডে যাওয়া
+        const majlisItem = e.target.closest('.majlis-item');
+        if (majlisItem && majlisItem.hasAttribute('data-majlis-id')) {
+            window.location.href = 'majlis-detail.html?id=' + majlisItem.getAttribute('data-majlis-id');
+            return;
+        }
+
+        // ১০) বাইরে ক্লিক করলে সব রিয়েকশন পিকার বন্ধ হয়ে যাবে
         closeAllPickers();
     });
 
@@ -277,5 +342,6 @@ window.SylNet = {
     renderCommentsFor: renderCommentsFor,
     renderShareCountFor: renderShareCountFor,
     showToast: showToast,
-    newsData: sylnetNewsData
+    newsData: sylnetNewsData,
+    majlisData: sylnetMajlisData
 };
