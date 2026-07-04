@@ -6,7 +6,7 @@
     <title>SylNet | আপনার ডিজিটাল ঘর</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <div class="page-wrap">
@@ -38,7 +38,7 @@
             <div class="chip">প্রবাসী মজলিস</div>
         </div>
 
-        <div class="card post">
+        <div class="card post" data-post-id="p1">
             <div class="post-head">
                 <div class="user-avatar">র</div>
                 <div class="meta">
@@ -61,12 +61,20 @@
                         <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
                     </div>
                 </div>
-                <span>💬 কুনতা খও</span>
-                <span>↗️ আরো মানরে দেখাউক্কা</span>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <button type="button" class="comment-send-btn">➤</button>
+                </div>
             </div>
         </div>
 
-        <div class="card post">
+        <div class="card post" data-post-id="p2">
             <div class="post-head">
                 <div class="user-avatar">আ</div>
                 <div class="meta">
@@ -89,8 +97,16 @@
                         <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
                     </div>
                 </div>
-                <span>💬 কুনতা খও</span>
-                <span>↗️ আরো মানরে দেখাউক্কা</span>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <button type="button" class="comment-send-btn">➤</button>
+                </div>
             </div>
         </div>
 
@@ -118,7 +134,7 @@
             </div>
         </div>
 
-        <div class="card post">
+        <div class="card post" data-post-id="p3">
             <div class="post-head">
                 <div class="user-avatar">ছ</div>
                 <div class="meta">
@@ -141,8 +157,16 @@
                         <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
                     </div>
                 </div>
-                <span>💬 কুনতা খও</span>
-                <span>↗️ আরো মানরে দেখাউক্কা</span>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <button type="button" class="comment-send-btn">➤</button>
+                </div>
             </div>
         </div>
 
@@ -156,15 +180,19 @@
         <a href="more.html">☰ আরও</a>
     </nav>
 
+    <div class="toast" id="toast"></div>
+
 </div>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 <script>
     window.onload = function() {
         const savedPost = localStorage.getItem('myNewPost');
         if (savedPost) {
             const postContainer = document.querySelector('.container');
+            const newId = 'new-' + Date.now();
             const newCard = document.createElement('div');
             newCard.className = 'card post';
+            newCard.setAttribute('data-post-id', newId);
             newCard.innerHTML = `
                 <div class="post-head">
                     <div class="user-avatar">👤</div>
@@ -188,12 +216,24 @@
                             <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
                         </div>
                     </div>
-                    <span>💬 কুনতা খও</span>
-                    <span>↗️ আরো মানরে দেখাউক্কা</span>
+                    <span class="comment-toggle">💬 কুনতা খও</span>
+                    <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+                </div>
+                <div class="comment-section">
+                    <ul class="comment-list"></ul>
+                    <div class="comment-input-row">
+                        <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                        <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                        <button type="button" class="comment-send-btn">➤</button>
+                    </div>
                 </div>
             `;
             postContainer.insertBefore(newCard, postContainer.children[3]);
             localStorage.removeItem('myNewPost');
+            if (window.SylNet && window.SylNet.renderCommentsFor) {
+                window.SylNet.renderCommentsFor(newCard);
+                window.SylNet.renderShareCountFor(newCard);
+            }
         }
     };
 </script>
