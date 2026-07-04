@@ -44,6 +44,28 @@ function renderShareCountFor(postEl) {
         : '↗️ আরো মানরে দেখাউক্কা';
 }
 
+// ---------- খবরের বিস্তারিত তথ্য (news-detail.html-এর জন্য) ----------
+const sylnetNewsData = {
+    'news-1': {
+        title: 'সকালের আপডেট: সিলেটে বৃষ্টির সম্ভাবনা',
+        source: 'Surma Faror Khobor',
+        time: 'আজ',
+        body: 'আবহাওয়ার পূর্বাভাস অনুযায়ী আজ সিলেটে হালকা থেকে মাঝারি বৃষ্টির সম্ভাবনা রয়েছে। স্থানীয় কৃষকদের ফসল রক্ষার জন্য প্রয়োজনীয় ব্যবস্থা নিতে পরামর্শ দেওয়া হয়েছে। আবহাওয়া অধিদপ্তর জানিয়েছে, বিকেলের দিকে বৃষ্টির পরিমাণ কিছুটা বাড়তে পারে, তবে রাতের মধ্যে আকাশ পরিষ্কার হয়ে যাওয়ার সম্ভাবনা আছে।'
+    },
+    'news-2': {
+        title: 'নতুন বইমেলা বিষয়ক আলোচনা',
+        source: 'Surma Faror Khobor',
+        time: 'গতকাল',
+        body: 'সাহিত্য ও কবিতা মজলিসের সদস্যরা আগামী সপ্তাহে অনুষ্ঠিতব্য বইমেলা নিয়ে একটি বিশেষ আড্ডার আয়োজন করেছেন। স্থানীয় লেখক ও কবিরা তাদের নতুন বই নিয়ে আলোচনা করবেন। মেলায় সিলেটি ভাষা ও সংস্কৃতি বিষয়ক বইয়ের একটি আলাদা কর্নার থাকবে বলে আয়োজকরা জানিয়েছেন।'
+    },
+    'news-3': {
+        title: 'বিয়ানীবাজারে নয়া রাস্তা উদ্বোধন',
+        source: 'Surma Faror Khobor',
+        time: '২ দিন আগে',
+        body: 'এলাকাবাসীর দীর্ঘদিনের দাবির প্রেক্ষিতে বিয়ানীবাজার উপজেলায় নতুন রাস্তার নির্মাণকাজ অবশেষে সম্পন্ন হয়েছে। স্থানীয় জনপ্রতিনিধিরা জানিয়েছেন, এই রাস্তা দিয়ে যোগাযোগ ব্যবস্থার উল্লেখযোগ্য উন্নতি হবে এবং ব্যবসায়ীদের পণ্য পরিবহনে সুবিধা হবে। এলাকাবাসী এই উদ্যোগে খুশি প্রকাশ করেছেন।'
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // নিচের নেভিগেশনে বর্তমান পেজ হাইলাইট করা
@@ -221,7 +243,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // ৬) বাইরে ক্লিক করলে সব রিয়েকশন পিকার বন্ধ হয়ে যাবে
+        // ৬) পোস্টের লেখকের নাম/ছবিতে ক্লিক করলে প্রোফাইলে যাওয়া
+        const postHead = e.target.closest('.post-head');
+        if (postHead) {
+            window.location.href = 'profile.html';
+            return;
+        }
+
+        // ৭) "এনরে ছিনওনি?" সেকশনে কারো নাম/ছবিতে ক্লিক করলে প্রোফাইলে যাওয়া
+        // (তবে "যোগ করো" বাটনে ক্লিক করলে শুধু বাটনটাই টগল হবে, প্রোফাইলে যাবে না)
+        const personCard = e.target.closest('.person-card');
+        if (personCard && !e.target.closest('.join-btn')) {
+            window.location.href = 'profile.html';
+            return;
+        }
+
+        // ৮) বাইরে ক্লিক করলে সব রিয়েকশন পিকার বন্ধ হয়ে যাবে
         closeAllPickers();
     });
 
@@ -235,9 +272,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-// অন্য স্ক্রিপ্ট থেকে ব্যবহারের জন্য (যেমন নতুন পোস্ট যোগ হওয়ার সময়)
+// অন্য স্ক্রিপ্ট থেকে ব্যবহারের জন্য (যেমন নতুন পোস্ট যোগ হওয়ার সময়, বা news-detail.html)
 window.SylNet = {
     renderCommentsFor: renderCommentsFor,
     renderShareCountFor: renderShareCountFor,
-    showToast: showToast
+    showToast: showToast,
+    newsData: sylnetNewsData
 };
