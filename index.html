@@ -6,7 +6,7 @@
     <title>SylNet | আপনার ডিজিটাল ঘর</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <div class="page-wrap">
@@ -14,7 +14,7 @@
     <header class="app-header">
         <div class="logo">SylNet<span class="slogan">আমরা হখল ছিলটি</span></div>
         <nav class="top-nav">
-            <span>🔍</span>
+            <a href="search.html">🔍</a>
             <span>💬</span>
             <a href="profile.html">👤</a>
         </nav>
@@ -183,16 +183,18 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
     window.onload = function() {
         const savedPost = localStorage.getItem('myNewPost');
-        if (savedPost) {
+        const savedImage = localStorage.getItem('myNewPostImage');
+        if (savedPost !== null && savedPost !== undefined && (savedPost !== '' || savedImage)) {
             const postContainer = document.querySelector('.container');
             const newId = 'new-' + Date.now();
             const newCard = document.createElement('div');
             newCard.className = 'card post';
             newCard.setAttribute('data-post-id', newId);
+            const imageHtml = savedImage ? `<img src="${savedImage}" style="width:100%; display:block; margin-bottom:2px;">` : '';
             newCard.innerHTML = `
                 <div class="post-head">
                     <div class="user-avatar">👤</div>
@@ -201,7 +203,8 @@
                         <div class="post-time">এইমাত্র</div>
                     </div>
                 </div>
-                <p>${savedPost}</p>
+                ${savedPost ? '<p>' + savedPost + '</p>' : ''}
+                ${imageHtml}
                 <div class="post-actions">
                     <div class="reaction-wrap">
                         <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
@@ -230,6 +233,7 @@
             `;
             postContainer.insertBefore(newCard, postContainer.children[3]);
             localStorage.removeItem('myNewPost');
+            localStorage.removeItem('myNewPostImage');
             if (window.SylNet && window.SylNet.renderCommentsFor) {
                 window.SylNet.renderCommentsFor(newCard);
                 window.SylNet.renderShareCountFor(newCard);
