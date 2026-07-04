@@ -6,7 +6,7 @@
     <title>নতুন পোস্ট | SylNet</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <div class="page-wrap">
@@ -20,15 +20,29 @@
 
     <main class="container">
         <div class="card">
-            <div class="post-head" style="padding:0 0 12px;">
+            <div class="post-head" style="padding:0 0 12px; cursor:default;">
                 <div class="user-avatar">👤</div>
                 <div class="meta">
                     <div class="user-name">আপনি</div>
                     <div class="post-time">ফেঞ্চুগঞ্জ ইউনিয়ন মজলিস</div>
                 </div>
             </div>
-            <textarea id="postText" placeholder="আফনার মনর কতা এইঠে লেখউক্কা..." style="width: 100%; height: 130px;"></textarea>
-            <br><br>
+            <textarea id="postText" placeholder="আফনার মনর কতা এইঠে লেখউক্কা..." style="width: 100%; height: 110px;"></textarea>
+
+            <div id="imagePreviewBox" style="display:none; margin-top:10px; position:relative;">
+                <img id="imagePreview" src="" style="width:100%; border-radius:var(--radius-sm); display:block;">
+                <button type="button" id="removeImageBtn" style="position:absolute; top:8px; right:8px; width:28px; height:28px; border-radius:50%; background:rgba(0,0,0,0.55); color:#fff; border:none; font-size:14px; cursor:pointer;">✕</button>
+            </div>
+
+            <input type="file" id="postImageInput" accept="image/*" style="display:none">
+
+            <div class="composer-tools" style="display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border);">
+                <label for="postImageInput" style="display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--text-soft); cursor:pointer;">
+                    🖼️ ছবি
+                </label>
+            </div>
+
+            <br>
             <button onclick="savePost()" class="primary-btn" style="width: 100%;">পোস্ট করুন</button>
         </div>
     </main>
@@ -42,16 +56,41 @@
     </nav>
 
 </div>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
+    let selectedImageData = null;
+
+    document.getElementById('postImageInput').addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            selectedImageData = e.target.result;
+            document.getElementById('imagePreview').src = selectedImageData;
+            document.getElementById('imagePreviewBox').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    document.getElementById('removeImageBtn').addEventListener('click', function () {
+        selectedImageData = null;
+        document.getElementById('postImageInput').value = '';
+        document.getElementById('imagePreviewBox').style.display = 'none';
+    });
+
     function savePost() {
-        const text = document.getElementById('postText').value;
-        if (text.trim() !== "") {
-            localStorage.setItem('myNewPost', text);
-            window.location.href = 'index.html';
-        } else {
-            alert('দয়া করে কিছু লিখুন!');
+        const text = document.getElementById('postText').value.trim();
+        if (text === "" && !selectedImageData) {
+            alert('দয়া করে কিছু লিখুন বা ছবি যোগ করুন!');
+            return;
         }
+        localStorage.setItem('myNewPost', text);
+        if (selectedImageData) {
+            localStorage.setItem('myNewPostImage', selectedImageData);
+        } else {
+            localStorage.removeItem('myNewPostImage');
+        }
+        window.location.href = 'index.html';
     }
 </script>
 </body>
