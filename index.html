@@ -6,7 +6,7 @@
     <title>SylNet | আপনার ডিজিটাল ঘর</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <div class="page-wrap">
@@ -22,9 +22,9 @@
 
     <main class="container">
 
-        <div class="card post-input-box">
+        <div class="card post-input-box" onclick="window.location.href='create-post.html'" style="cursor:pointer;">
             <div class="user-avatar">👤</div>
-            <input type="text" placeholder="নয়া কিতা অইলো?">
+            <input type="text" placeholder="নয়া কিতা অইলো?" readonly style="cursor:pointer;">
         </div>
 
         <a href="news.html" class="news-strip">
@@ -183,7 +183,7 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 <script>
     window.onload = function() {
         const savedPost = localStorage.getItem('myNewPost');
