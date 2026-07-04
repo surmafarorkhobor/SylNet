@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>খবরের বিস্তারিত | SylNet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">খবরের বিস্তারিত<span class="slogan">Surma Faror Khobor</span></div>
+        <nav class="top-nav">
+            <a href="news.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card" id="newsDetailCard">
+            <span class="news-source" id="ndSource"></span>
+            <div class="news-title" id="ndTitle" style="font-size:16px; margin-bottom:10px;"></div>
+            <p id="ndBody" style="font-size:13.5px; line-height:1.75; color:var(--text);"></p>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+</div>
+<script src="app.js?v=4"></script>
+<script>
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const data = (window.SylNet && window.SylNet.newsData) ? window.SylNet.newsData[id] : null;
+
+        if (data) {
+            document.getElementById('ndSource').textContent = data.source + ' · ' + data.time;
+            document.getElementById('ndTitle').textContent = data.title;
+            document.getElementById('ndBody').textContent = data.body;
+        } else {
+            document.getElementById('newsDetailCard').innerHTML =
+                '<p>দুঃখিত, এই খবরটি পাওয়া যায়নি।</p>';
+        }
+    })();
+</script>
+</body>
+</html>
