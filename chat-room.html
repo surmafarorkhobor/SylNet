@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>চ্যাট | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=7">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo" id="crName">চ্যাট<span class="slogan" id="crStatus">লোড হচ্ছে...</span></div>
+        <nav class="top-nav">
+            <a href="chat.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container" id="crMessages" style="padding-bottom:100px;">
+        <!-- JS দিয়ে ভরা হবে -->
+    </main>
+
+    <div class="chat-input-bar">
+        <span class="ci-icon">😊</span>
+        <input type="text" id="crInput" placeholder="একটা মেসেজ লিখুন...">
+        <span class="ci-icon" id="crMicBtn">🎤</span>
+        <button type="button" id="crSendBtn">➤</button>
+    </div>
+
+</div>
+<script src="app.js?v=7"></script>
+<script>
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const chatId = params.get('id');
+        const data = (window.Sylhetin && window.Sylhetin.chatData) ? window.Sylhetin.chatData[chatId] : null;
+        const messagesBox = document.getElementById('crMessages');
+
+        if (!data) {
+            messagesBox.innerHTML = '<div class="card"><p>দুঃখিত, এই চ্যাটটি পাওয়া যায়নি।</p></div>';
+            return;
+        }
+
+        document.getElementById('crName').firstChild.textContent = data.name;
+        document.getElementById('crStatus').textContent = data.status || 'সক্রিয়';
+
+        function render() {
+            const saved = JSON.parse(localStorage.getItem('sylhetin_chat_' + chatId) || 'null');
+            const messages = saved || data.messages;
+            let html = '';
+            messages.forEach(function (m) {
+                const side = m.from === 'me' ? 'me' : 'them';
+                if (m.type === 'voice') {
+                    html += `
+                        <div class="msg-row ${side}">
+                            <div class="msg-bubble voice">🎤 <span class="voice-duration">${m.duration || '0:12'}</span></div>
+                        </div>`;
+                } else {
+                    html += `
+                        <div class="msg-row ${side}">
+                            <div class="msg-bubble">${m.text}</div>
+                        </div>`;
+                }
+            });
+            messagesBox.innerHTML = html;
+            messagesBox.scrollTop = messagesBox.scrollHeight;
+        }
+
+        render();
+
+        function sendMessage() {
+            const input = document.getElementById('crInput');
+            const text = input.value.trim();
+            if (text === '') return;
+            const saved = JSON.parse(localStorage.getItem('sylhetin_chat_' + chatId) || 'null') || data.messages.slice();
+            saved.push({ from: 'me', type: 'text', text: text });
+            localStorage.setItem('sylhetin_chat_' + chatId, JSON.stringify(saved));
+            input.value = '';
+            render();
+        }
+
+        document.getElementById('crSendBtn').addEventListener('click', sendMessage);
+        document.getElementById('crInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        document.getElementById('crMicBtn').addEventListener('click', function () {
+            if (window.Sylhetin) window.Sylhetin.showToast('ভয়েস মেসেজ রেকর্ডিং এখনো তৈরি হচ্ছে');
+        });
+    })();
+</script>
+</body>
+</html>

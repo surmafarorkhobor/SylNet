@@ -6,7 +6,7 @@
     <title>Sylhetin | আপনার ডিজিটাল ঘর</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <div class="page-wrap">
@@ -15,7 +15,7 @@
         <div class="logo">Sylhetin<span class="slogan">আমরা হখল ছিলটি</span></div>
         <nav class="top-nav">
             <a href="search.html">🔍</a>
-            <span>💬</span>
+            <a href="chat.html">💬</a>
             <a href="profile.html">👤</a>
         </nav>
     </header>
@@ -183,18 +183,46 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 <script>
     window.onload = function() {
         const savedPost = localStorage.getItem('myNewPost');
         const savedImage = localStorage.getItem('myNewPostImage');
-        if (savedPost !== null && savedPost !== undefined && (savedPost !== '' || savedImage)) {
+        const savedVideo = localStorage.getItem('myNewPostVideo');
+        const savedPollRaw = localStorage.getItem('myNewPostPoll');
+        const savedPoll = savedPollRaw ? JSON.parse(savedPollRaw) : null;
+
+        if (savedPost !== null && savedPost !== undefined && (savedPost !== '' || savedImage || savedVideo || savedPoll)) {
             const postContainer = document.querySelector('.container');
             const newId = 'new-' + Date.now();
             const newCard = document.createElement('div');
             newCard.className = 'card post';
             newCard.setAttribute('data-post-id', newId);
+
             const imageHtml = savedImage ? `<img src="${savedImage}" style="width:100%; display:block; margin-bottom:2px;">` : '';
+            const videoHtml = savedVideo ? `<video src="${savedVideo}" controls style="width:100%; display:block; margin-bottom:2px; background:#000;"></video>` : '';
+
+            let pollHtml = '';
+            if (savedPoll) {
+                let optionsHtml = '';
+                savedPoll.options.forEach(function (opt) {
+                    optionsHtml += `
+                        <button type="button" class="poll-option">
+                            <span class="poll-bar"></span>
+                            <span class="poll-option-content">
+                                <span class="poll-label">${opt}</span>
+                                <span class="poll-pct"></span>
+                            </span>
+                        </button>`;
+                });
+                pollHtml = `
+                    <div class="poll-box" data-poll-id="${newId}">
+                        <div class="poll-question">${savedPoll.question}</div>
+                        ${optionsHtml}
+                        <div class="poll-total"></div>
+                    </div>`;
+            }
+
             newCard.innerHTML = `
                 <div class="post-head">
                     <div class="user-avatar">👤</div>
@@ -205,6 +233,8 @@
                 </div>
                 ${savedPost ? '<p>' + savedPost + '</p>' : ''}
                 ${imageHtml}
+                ${videoHtml}
+                ${pollHtml}
                 <div class="post-actions">
                     <div class="reaction-wrap">
                         <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
@@ -234,9 +264,14 @@
             postContainer.insertBefore(newCard, postContainer.children[3]);
             localStorage.removeItem('myNewPost');
             localStorage.removeItem('myNewPostImage');
+            localStorage.removeItem('myNewPostVideo');
+            localStorage.removeItem('myNewPostPoll');
             if (window.Sylhetin && window.Sylhetin.renderCommentsFor) {
                 window.Sylhetin.renderCommentsFor(newCard);
                 window.Sylhetin.renderShareCountFor(newCard);
+            }
+            if (savedPoll && window.Sylhetin && window.Sylhetin.renderPollResults) {
+                window.Sylhetin.renderPollResults(newCard.querySelector('.poll-box'));
             }
         }
     };
