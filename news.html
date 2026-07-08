@@ -6,7 +6,7 @@
     <title>খবর | Sylhetin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <div class="page-wrap">
@@ -19,7 +19,7 @@
     </header>
 
     <main class="container" id="newsPagesContainer">
-        <!-- JS দিয়ে ভরা হবে -->
+        <!-- JS দিয়ে ভরা হবে (Create বাটনসহ) -->
     </main>
 
     <nav class="bottom-nav">
@@ -33,23 +33,25 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 <script>
     (function () {
-        const pagesData = (window.Sylhetin && window.Sylhetin.newsPagesData) || {};
+        const pagesData = (window.Sylhetin && window.Sylhetin.getAllNewsPagesData) ? window.Sylhetin.getAllNewsPagesData() : {};
         const container = document.getElementById('newsPagesContainer');
-        let html = '<div class="empty-note" style="margin:14px 16px 6px; text-align:left; padding:0;">যাচাইকৃত সংবাদমাধ্যমের পেজ থেকে খবর — শুধু অনুমোদিত Newspaper/Online Portal/Television-ই এখানে পোস্ট করতে পারে।</div>';
+        let html = '<a href="create-news-page.html" class="create-cta-btn">➕ নতুন নিউজ পেজ তৈরি করো</a>';
+        html += '<div class="empty-note" style="margin:0 0 12px; text-align:left; padding:0;">যাচাইকৃত সংবাদমাধ্যমের পেজ থেকে খবর — শুধু অনুমোদিত Newspaper/Online Portal/Television-ই এখানে পোস্ট করতে পারে।</div>';
         html += '<div class="card" style="padding:0;">';
 
         Object.keys(pagesData).forEach(function (pageId) {
             const page = pagesData[pageId];
-            const verifiedBadge = page.verified ? '<span class="badge">✅ যাচাইকৃত</span>' : '';
+            const verifiedBadge = page.verified ? '<span class="badge">✅ যাচাইকৃত</span>' : (page.status === 'pending' ? '<span class="badge" style="background:#FFF3CD; color:#8A6D00;">⏳ পর্যালোচনাধীন</span>' : '');
+            const iconStyle = page.logoImage ? `background-image:url('${page.logoImage}'); background-size:cover; background-position:center;` : '';
             html += `
                 <div class="majlis-item news-page-item" data-news-page-id="${pageId}">
-                    <div class="majlis-icon">${page.logo}</div>
+                    <div class="majlis-icon" style="${iconStyle}">${page.logoImage ? '' : page.logo}</div>
                     <div class="info">
                         <div class="name">${page.name} ${verifiedBadge}</div>
-                        <div class="members">${page.pageType} · ${page.followers} ফলোয়ার</div>
+                        <div class="members">${page.pageType} · ${page.followers || '০'} ফলোয়ার</div>
                     </div>
                     <button type="button" class="follow-btn" data-user-id="${pageId}">👁️ ফলো</button>
                 </div>
@@ -58,10 +60,6 @@
 
         html += '</div>';
         container.innerHTML = html;
-
-        if (window.Sylhetin && window.Sylhetin.restoreJoinStates) {
-            // follow-btn অবস্থা রিস্টোর হয় app.js-এর সাধারণ DOMContentLoaded লজিক দিয়েই
-        }
     })();
 </script>
 </body>

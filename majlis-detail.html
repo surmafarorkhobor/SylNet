@@ -6,7 +6,7 @@
     <title>মজলিস | Sylhetin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <div class="page-wrap">
@@ -33,12 +33,13 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
 <script>
     (function () {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
-        const data = (window.Sylhetin && window.Sylhetin.majlisData) ? window.Sylhetin.majlisData[id] : null;
+        const allMajlis = (window.Sylhetin && window.Sylhetin.getAllMajlisData) ? window.Sylhetin.getAllMajlisData() : {};
+        const data = allMajlis[id];
         const container = document.getElementById('mdContainer');
 
         if (!data) {
@@ -51,11 +52,20 @@
 
         const joinedClass = data.joined ? 'joined' : '';
         const joinedLabel = data.joined ? '✅ যোগ দিছি' : 'যোগ করো';
+        const logoDisplay = data.logoImage ? '' : data.icon;
 
         let html = `
-            <div class="card">
+            <div class="profile-hero" data-entity-key="majlis-${id}" style="height:70px; margin-bottom:0;">
+                <button type="button" class="cover-edit-btn" title="কভার ফটো পাল্টাও">📷</button>
+                <div class="profile-avatar-big" style="width:60px; height:60px; font-size:22px; bottom:-26px;">
+                    ${logoDisplay}
+                    <button type="button" class="avatar-edit-btn" title="মজলিস লোগো পাল্টাও">📷</button>
+                </div>
+                <input type="file" class="cover-file-input" accept="image/*" style="display:none">
+                <input type="file" class="avatar-file-input" accept="image/*" style="display:none">
+            </div>
+            <div class="card" style="margin-top:34px;">
                 <div class="majlis-item" data-majlis-id="${id}" style="border-bottom:none; padding:4px;">
-                    <div class="majlis-icon" style="width:52px;height:52px;font-size:22px;">${data.icon}</div>
                     <div class="info">
                         <div class="name" style="font-size:15px;">${data.name}</div>
                         <div class="members">${data.members} জন সদস্য</div>
@@ -66,7 +76,12 @@
             </div>
         `;
 
-        data.posts.forEach(function (post, index) {
+        const posts = data.posts || [];
+        if (posts.length === 0) {
+            html += '<div class="empty-note">এখনো কোনো পোস্ট নেই — প্রথম পোস্টটা করুন!</div>';
+        }
+
+        posts.forEach(function (post, index) {
             const postId = id + '-post-' + index;
             html += `
                 <div class="card post" data-post-id="${postId}">
@@ -121,6 +136,11 @@
         // জয়েন বাটনের সেভ করা অবস্থা ফিরিয়ে আনা
         if (window.Sylhetin && window.Sylhetin.restoreJoinStates) {
             window.Sylhetin.restoreJoinStates(container);
+        }
+
+        // কভার/লোগো ছবির সেভ করা অবস্থা ফিরিয়ে আনা
+        if (window.Sylhetin && window.Sylhetin.applyEntityPhotos) {
+            window.Sylhetin.applyEntityPhotos(document);
         }
     })();
 </script>

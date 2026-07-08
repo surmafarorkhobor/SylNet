@@ -110,12 +110,33 @@ const sylhetinNewsPagesData = {
 
 /** নিউজ পোস্ট আইডি (যেমন "np1-a1") দিয়ে খুঁজে পেজ ও পোস্ট বের করা */
 function findNewsPost(fullPostId) {
-    for (const pageId in sylhetinNewsPagesData) {
-        const page = sylhetinNewsPagesData[pageId];
-        const found = page.posts.find(function (p) { return (pageId + '-' + p.id) === fullPostId; });
+    const allPages = getAllNewsPagesData();
+    for (const pageId in allPages) {
+        const page = allPages[pageId];
+        const found = (page.posts || []).find(function (p) { return (pageId + '-' + p.id) === fullPostId; });
         if (found) return { pageId: pageId, page: page, post: found };
     }
     return null;
+}
+
+/** ইউজারের তৈরি করা মজলিস localStorage থেকে বের করা */
+function getUserMajlisData() {
+    return JSON.parse(localStorage.getItem('sylhetin_user_majlis') || '{}');
+}
+
+/** স্ট্যাটিক ডেমো মজলিস + ইউজারের তৈরি করা মজলিস — দুটো মিলিয়ে একটা অবজেক্ট বানানো */
+function getAllMajlisData() {
+    return Object.assign({}, sylhetinMajlisData, getUserMajlisData());
+}
+
+/** ইউজারের তৈরি করা নিউজ পেজ localStorage থেকে বের করা */
+function getUserNewsPagesData() {
+    return JSON.parse(localStorage.getItem('sylhetin_user_news_pages') || '{}');
+}
+
+/** স্ট্যাটিক ডেমো নিউজ পেজ + ইউজারের তৈরি করা পেজ — দুটো মিলিয়ে একটা অবজেক্ট বানানো */
+function getAllNewsPagesData() {
+    return Object.assign({}, sylhetinNewsPagesData, getUserNewsPagesData());
 }
 
 // ---------- মজলিস গ্রুপের তথ্য (majlis-detail.html ও search.html-এর জন্য) ----------
@@ -172,6 +193,27 @@ const sylhetinMajlisData = {
         ]
     }
 };
+
+// ---------- প্রোফাইল/মজলিস/নিউজ পেজের কভার-লোগো ছবি লোড করা (জেনেরিক, যেকোনো এনটিটির জন্য) ----------
+function applyEntityPhotos(container) {
+    const scope = container || document;
+    scope.querySelectorAll('.profile-hero[data-entity-key]').forEach(function (hero) {
+        const key = hero.getAttribute('data-entity-key');
+        const cover = localStorage.getItem('sylhetin_photo_cover_' + key);
+        if (cover) {
+            hero.style.backgroundImage = 'url(' + cover + ')';
+        }
+        const avatarBig = hero.querySelector('.profile-avatar-big');
+        const avatar = localStorage.getItem('sylhetin_photo_avatar_' + key);
+        if (avatarBig && avatar) {
+            avatarBig.style.backgroundImage = 'url(' + avatar + ')';
+            avatarBig.classList.add('has-photo');
+            Array.from(avatarBig.childNodes).forEach(function (node) {
+                if (node.nodeType === Node.TEXT_NODE) node.textContent = '';
+            });
+        }
+    });
+}
 
 // ---------- মজলিস জয়েন অবস্থা localStorage থেকে ফিরিয়ে আনা ----------
 function restoreJoinStates(container) {
@@ -361,63 +403,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // পেজ লোডের সময় প্রোফাইল/কভার ছবি থাকলে সেট করা
-    const coverEl = document.getElementById('coverPhoto');
-    const avatarEl = document.getElementById('avatarPhoto');
-    const savedCover = localStorage.getItem('sylhetin_cover');
-    const savedAvatar = localStorage.getItem('sylhetin_avatar');
-    if (coverEl && savedCover) {
-        coverEl.style.backgroundImage = 'url(' + savedCover + ')';
-    }
-    if (avatarEl && savedAvatar) {
-        avatarEl.style.backgroundImage = 'url(' + savedAvatar + ')';
-        avatarEl.classList.add('has-photo');
-        avatarEl.childNodes.forEach(function (node) {
-            if (node.nodeType === Node.TEXT_NODE) node.textContent = '';
-        });
-    }
-
-    // কভার ফটো আপলোড
-    const coverBtn = document.getElementById('coverEditBtn');
-    const coverInput = document.getElementById('coverInput');
-    if (coverBtn && coverInput) {
-        coverBtn.addEventListener('click', function () { coverInput.click(); });
-        coverInput.addEventListener('change', function () {
-            const file = coverInput.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                localStorage.setItem('sylhetin_cover', e.target.result);
-                coverEl.style.backgroundImage = 'url(' + e.target.result + ')';
-                showToast('কভার ফটো পাল্টানো অইছে!');
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    // প্রোফাইল ফটো আপলোড
-    const avatarBtn = document.getElementById('avatarEditBtn');
-    const avatarInput = document.getElementById('avatarInput');
-    if (avatarBtn && avatarInput) {
-        avatarBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            avatarInput.click();
-        });
-        avatarInput.addEventListener('change', function () {
-            const file = avatarInput.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                localStorage.setItem('sylhetin_avatar', e.target.result);
-                avatarEl.style.backgroundImage = 'url(' + e.target.result + ')';
-                avatarEl.childNodes.forEach(function (node) {
-                    if (node.nodeType === Node.TEXT_NODE) node.textContent = '';
-                });
-                showToast('প্রোফাইল ফটো পাল্টানো অইছে!');
-            };
-            reader.readAsDataURL(file);
-        });
-    }
+    // পেজ লোডের সময় প্রোফাইল/মজলিস/নিউজ পেজের কভার-লোগো ছবি থাকলে সেট করা
+    applyEntityPhotos();
 
     // ---------- রিয়েকশন পিকার, কমেন্ট, শেয়ার — সব ইভেন্ট ডেলিগেশন দিয়ে ----------
     // যাতে নতুন যোগ হওয়া পোস্টেও (localStorage থেকে) সব ফিচার কাজ করে
@@ -576,6 +563,22 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // ৯খ) কভার/প্রোফাইল-লোগো ফটো এডিট বাটন (প্রোফাইল, মজলিস, নিউজ পেজ — সব জায়গায় একই লজিক)
+        const coverEditBtn = e.target.closest('.cover-edit-btn');
+        if (coverEditBtn) {
+            const hero = coverEditBtn.closest('.profile-hero');
+            const input = hero ? hero.querySelector('.cover-file-input') : null;
+            if (input) input.click();
+            return;
+        }
+        const avatarEditBtn = e.target.closest('.avatar-edit-btn');
+        if (avatarEditBtn) {
+            const hero = avatarEditBtn.closest('.profile-hero');
+            const input = hero ? hero.querySelector('.avatar-file-input') : null;
+            if (input) input.click();
+            return;
+        }
+
         // ১০) জরিপে (Poll) ভোট দেওয়া
         const pollOption = e.target.closest('.poll-option');
         if (pollOption) {
@@ -609,6 +612,46 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'Enter' && e.target.classList.contains('comment-input')) {
             const sendBtn = e.target.closest('.comment-section').querySelector('.comment-send-btn');
             if (sendBtn) sendBtn.click();
+        }
+    });
+
+    // কভার/প্রোফাইল-লোগো ফাইল সিলেক্ট করার পর সেভ ও দেখানো (প্রোফাইল, মজলিস, নিউজ পেজ — সব জায়গায়)
+    document.addEventListener('change', function (e) {
+        const coverInput = e.target.closest('.cover-file-input');
+        if (coverInput) {
+            const file = coverInput.files[0];
+            if (!file) return;
+            const hero = coverInput.closest('.profile-hero');
+            const key = hero ? hero.getAttribute('data-entity-key') : null;
+            if (!key) return;
+            const reader = new FileReader();
+            reader.onload = function (e2) {
+                localStorage.setItem('sylhetin_photo_cover_' + key, e2.target.result);
+                hero.style.backgroundImage = 'url(' + e2.target.result + ')';
+                showToast('কভার ফটো পাল্টানো অইছে!');
+            };
+            reader.readAsDataURL(file);
+            return;
+        }
+
+        const avatarInput = e.target.closest('.avatar-file-input');
+        if (avatarInput) {
+            const file = avatarInput.files[0];
+            if (!file) return;
+            const hero = avatarInput.closest('.profile-hero');
+            const key = hero ? hero.getAttribute('data-entity-key') : null;
+            const avatarBig = hero ? hero.querySelector('.profile-avatar-big') : null;
+            if (!key || !avatarBig) return;
+            const reader = new FileReader();
+            reader.onload = function (e2) {
+                localStorage.setItem('sylhetin_photo_avatar_' + key, e2.target.result);
+                avatarBig.style.backgroundImage = 'url(' + e2.target.result + ')';
+                Array.from(avatarBig.childNodes).forEach(function (node) {
+                    if (node.nodeType === Node.TEXT_NODE) node.textContent = '';
+                });
+                showToast('প্রোফাইল/লোগো ফটো পাল্টানো অইছে!');
+            };
+            reader.readAsDataURL(file);
         }
     });
 
@@ -653,5 +696,8 @@ window.Sylhetin = {
     majlisData: sylhetinMajlisData,
     chatData: sylhetinChatData,
     restoreJoinStates: restoreJoinStates,
-    renderPollResults: renderPollResults
+    renderPollResults: renderPollResults,
+    getAllMajlisData: getAllMajlisData,
+    getAllNewsPagesData: getAllNewsPagesData,
+    applyEntityPhotos: applyEntityPhotos
 };

@@ -6,7 +6,7 @@
     <title>মজলিস | Sylhetin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <div class="page-wrap">
@@ -21,6 +21,8 @@
 
     <main class="container">
 
+        <a href="create-majlis.html" class="create-cta-btn">➕ নতুন মজলিস তৈরি করো</a>
+
         <div class="chip-rail">
             <div class="chip active">ইউনিয়ন</div>
             <div class="chip">উপজেলা</div>
@@ -30,48 +32,9 @@
             <div class="chip">Student</div>
         </div>
 
-        <div class="card">
+        <div class="card" id="majlisListCard">
             <h3>জনপ্রিয় মজলিসসমূহ</h3>
-            <div class="majlis-item" data-majlis-id="m1">
-                <div class="majlis-icon">🏠</div>
-                <div class="info">
-                    <div class="name">ফেঞ্চুগঞ্জ ইউনিয়ন মজলিস</div>
-                    <div class="members">১২,৪০০ জন সদস্য</div>
-                </div>
-                <button class="join-btn joined">✅ যোগ দিছি</button>
-            </div>
-            <div class="majlis-item" data-majlis-id="m2">
-                <div class="majlis-icon">📚</div>
-                <div class="info">
-                    <div class="name">সাহিত্য ও কবিতা</div>
-                    <div class="members">৩,৮০০ জন সদস্য</div>
-                </div>
-                <button class="join-btn">যোগ করো</button>
-            </div>
-            <div class="majlis-item" data-majlis-id="m3">
-                <div class="majlis-icon">💻</div>
-                <div class="info">
-                    <div class="name">প্রযুক্তি ও কোডিং</div>
-                    <div class="members">২,১৫০ জন সদস্য</div>
-                </div>
-                <button class="join-btn">যোগ করো</button>
-            </div>
-            <div class="majlis-item" data-majlis-id="m4">
-                <div class="majlis-icon">🎭</div>
-                <div class="info">
-                    <div class="name">সিলেটী সংস্কৃতি</div>
-                    <div class="members">৬,৯০০ জন সদস্য</div>
-                </div>
-                <button class="join-btn">যোগ করো</button>
-            </div>
-            <div class="majlis-item" data-majlis-id="m5">
-                <div class="majlis-icon">✈️</div>
-                <div class="info">
-                    <div class="name">প্রবাসী মজলিস — সৌদি আরব</div>
-                    <div class="members">২১,৩০০ জন সদস্য</div>
-                </div>
-                <button class="join-btn">যোগ করো</button>
-            </div>
+            <!-- JS দিয়ে ভরা হবে -->
         </div>
 
     </main>
@@ -84,7 +47,37 @@
         <a href="more.html">☰ আরও</a>
     </nav>
 
+    <div class="toast" id="toast"></div>
+
 </div>
-<script src="app.js?v=8"></script>
+<script src="app.js?v=9"></script>
+<script>
+    (function () {
+        const allMajlis = (window.Sylhetin && window.Sylhetin.getAllMajlisData) ? window.Sylhetin.getAllMajlisData() : {};
+        const card = document.getElementById('majlisListCard');
+        let html = '<h3>জনপ্রিয় মজলিসসমূহ</h3>';
+
+        Object.keys(allMajlis).forEach(function (id) {
+            const m = allMajlis[id];
+            const coverStyle = m.logoImage ? `background-image:url('${m.logoImage}'); background-size:cover; background-position:center;` : '';
+            html += `
+                <div class="majlis-item" data-majlis-id="${id}">
+                    <div class="majlis-icon" style="${coverStyle}">${m.logoImage ? '' : m.icon}</div>
+                    <div class="info">
+                        <div class="name">${m.name}</div>
+                        <div class="members">${m.members} জন সদস্য</div>
+                    </div>
+                    <button type="button" class="join-btn ${m.joined ? 'joined' : ''}">${m.joined ? '✅ যোগ দিছি' : 'যোগ করো'}</button>
+                </div>
+            `;
+        });
+
+        card.innerHTML = html;
+
+        if (window.Sylhetin && window.Sylhetin.restoreJoinStates) {
+            window.Sylhetin.restoreJoinStates(card);
+        }
+    })();
+</script>
 </body>
 </html>

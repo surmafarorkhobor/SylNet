@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নতুন নিউজ পেজ | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">নতুন নিউজ পেজ<span class="slogan">যাচাইয়ের জন্য আবেদন করুন</span></div>
+        <nav class="top-nav">
+            <a href="news.html">✕</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="empty-note" style="margin:0 0 12px; text-align:left; padding:0;">
+            ⚠️ এই পেজ থেকে খবর পাবলিশ করার আগে Sylhetin টিমের অনুমোদন লাগবে। আবেদন জমা দেওয়ার পর "পর্যালোচনাধীন" অবস্থায় দেখাবে।
+        </div>
+
+        <div class="card">
+            <h3>পেজের ধরন</h3>
+            <div class="icon-picker" id="iconPicker">
+                <span class="icon-option selected" data-icon="📰" data-type="newspaper">📰</span>
+                <span class="icon-option" data-icon="📡" data-type="online_portal">📡</span>
+                <span class="icon-option" data-icon="📺" data-type="television">📺</span>
+            </div>
+            <div class="chip-rail" id="typePicker" style="margin-top:10px;">
+                <div class="chip active" data-type="newspaper">সংবাদপত্র</div>
+                <div class="chip" data-type="online_portal">অনলাইন পোর্টাল</div>
+                <div class="chip" data-type="television">টেলিভিশন</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <label class="form-label">সংবাদমাধ্যমের নাম *</label>
+            <input type="text" id="pageName" placeholder="যেমন: Sylhet Barta" class="form-input">
+
+            <label class="form-label">About / বিবরণ *</label>
+            <textarea id="pageAbout" placeholder="সংবাদমাধ্যমটি কী নিয়ে কাজ করে..." class="form-input" style="height:70px;"></textarea>
+
+            <label class="form-label">ওয়েবসাইট (ঐচ্ছিক)</label>
+            <input type="text" id="pageWebsite" placeholder="example.com" class="form-input">
+
+            <label class="form-label">যোগাযোগ (ঐচ্ছিক)</label>
+            <input type="text" id="pageContact" placeholder="ফোন/ইমেইল" class="form-input">
+
+            <label class="form-label">ঠিকানা (ঐচ্ছিক)</label>
+            <input type="text" id="pageAddress" placeholder="অফিসের ঠিকানা" class="form-input">
+        </div>
+
+        <button type="button" id="createPageBtn" class="primary-btn" style="width:100%;">📨 অনুমোদনের জন্য জমা দাও</button>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=9"></script>
+<script>
+    let selectedLogo = '📰';
+    let selectedType = 'newspaper';
+    const typeLabels = { newspaper: 'সংবাদপত্র', online_portal: 'অনলাইন পোর্টাল', television: 'টেলিভিশন' };
+
+    function syncTypeSelection(type) {
+        selectedType = type;
+        document.querySelectorAll('#iconPicker .icon-option').forEach(function (el) {
+            el.classList.toggle('selected', el.getAttribute('data-type') === type);
+            if (el.getAttribute('data-type') === type) selectedLogo = el.getAttribute('data-icon');
+        });
+        document.querySelectorAll('#typePicker .chip').forEach(function (el) {
+            el.classList.toggle('active', el.getAttribute('data-type') === type);
+        });
+    }
+
+    document.querySelectorAll('#iconPicker .icon-option').forEach(function (el) {
+        el.addEventListener('click', function () { syncTypeSelection(el.getAttribute('data-type')); });
+    });
+    document.querySelectorAll('#typePicker .chip').forEach(function (el) {
+        el.addEventListener('click', function () { syncTypeSelection(el.getAttribute('data-type')); });
+    });
+
+    document.getElementById('createPageBtn').addEventListener('click', function () {
+        const name = document.getElementById('pageName').value.trim();
+        const about = document.getElementById('pageAbout').value.trim();
+        const website = document.getElementById('pageWebsite').value.trim();
+
+        if (name === '' || about === '') {
+            alert('দয়া করে নাম আর বিবরণ দুটোই লিখুন!');
+            return;
+        }
+
+        const id = 'unp' + Date.now();
+        const newPage = {
+            name: name,
+            logo: selectedLogo,
+            pageType: typeLabels[selectedType],
+            verified: false,
+            status: 'pending',
+            followers: '০',
+            about: about,
+            website: website || 'নেই',
+            posts: []
+        };
+
+        const userPages = JSON.parse(localStorage.getItem('sylhetin_user_news_pages') || '{}');
+        userPages[id] = newPage;
+        localStorage.setItem('sylhetin_user_news_pages', JSON.stringify(userPages));
+
+        if (window.Sylhetin) window.Sylhetin.showToast('আবেদন জমা হয়েছে, পর্যালোচনার অপেক্ষায় আছে!');
+        setTimeout(function () {
+            window.location.href = 'news-page-detail.html?id=' + id;
+        }, 600);
+    });
+</script>
+</body>
+</html>
