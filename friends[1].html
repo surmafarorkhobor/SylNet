@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বন্ধুরা | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">বন্ধুরা<span class="slogan">আফনার সিলেটি বন্ধুরা</span></div>
+        <nav class="top-nav">
+            <a href="more.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="section-title-plain" id="requestsTitle">📨 ফ্রেন্ড রিকোয়েস্ট</div>
+        <div class="card" id="requestsCard" style="padding:0;">
+            <div class="chat-list-item" data-request-id="fr1">
+                <div class="user-avatar">হ</div>
+                <div class="info">
+                    <div class="name">হাসান আলী</div>
+                    <div class="preview">প্রবাসী মজলিস — সৌদি আরব</div>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button type="button" class="request-accept-btn" data-request-id="fr1">✅</button>
+                    <button type="button" class="request-decline-btn" data-request-id="fr1">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title-plain">👥 বন্ধু তালিকা (৩)</div>
+        <div class="card" style="padding:0;">
+            <div class="chat-list-item" onclick="window.location.href='profile.html'">
+                <div class="user-avatar">র</div>
+                <div class="info">
+                    <div class="name">আব্দুর রাজ্জাক</div>
+                    <div class="preview">ফেঞ্চুগঞ্জ ইউনিয়ন</div>
+                </div>
+                <button type="button" class="message-btn" style="flex-shrink:0;" onclick="event.stopPropagation(); window.location.href='chat-room.html?id=c1';">💬</button>
+            </div>
+            <div class="chat-list-item" onclick="window.location.href='profile.html'">
+                <div class="user-avatar">আ</div>
+                <div class="info">
+                    <div class="name">আরিফ চৌধুরী</div>
+                    <div class="preview">সাহিত্য ও কবিতা মজলিস</div>
+                </div>
+                <button type="button" class="message-btn" style="flex-shrink:0;" onclick="event.stopPropagation(); window.location.href='chat-room.html?id=c2';">💬</button>
+            </div>
+            <div class="chat-list-item" onclick="window.location.href='profile.html'">
+                <div class="user-avatar">ছ</div>
+                <div class="info">
+                    <div class="name">সাফিয়া বেগম</div>
+                    <div class="preview">সিলেট জেলা</div>
+                </div>
+                <button type="button" class="message-btn" style="flex-shrink:0;" onclick="event.stopPropagation(); window.location.href='chat-room.html?id=c3';">💬</button>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    (function () {
+        // যেসব রিকোয়েস্ট আগেই Accept/Decline করা হয়ে গেছে, সেগুলো লুকানো
+        document.querySelectorAll('[data-request-id]').forEach(function (row) {
+            const reqId = row.getAttribute('data-request-id');
+            const decision = localStorage.getItem('sylhetin_request_' + reqId);
+            if (decision) {
+                const parentRow = row.closest('.chat-list-item');
+                if (parentRow) parentRow.style.display = 'none';
+            }
+        });
+
+        function checkEmptyRequests() {
+            const card = document.getElementById('requestsCard');
+            const visible = Array.from(card.querySelectorAll('.chat-list-item')).some(function (r) { return r.style.display !== 'none'; });
+            if (!visible) {
+                card.style.display = 'none';
+                document.getElementById('requestsTitle').style.display = 'none';
+            }
+        }
+        checkEmptyRequests();
+
+        document.querySelectorAll('.request-accept-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const reqId = btn.getAttribute('data-request-id');
+                localStorage.setItem('sylhetin_request_' + reqId, 'accepted');
+                btn.closest('.chat-list-item').style.display = 'none';
+                if (window.Sylhetin) window.Sylhetin.showToast('ফ্রেন্ড রিকোয়েস্ট গ্রহণ করা হয়েছে!');
+                checkEmptyRequests();
+            });
+        });
+        document.querySelectorAll('.request-decline-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const reqId = btn.getAttribute('data-request-id');
+                localStorage.setItem('sylhetin_request_' + reqId, 'declined');
+                btn.closest('.chat-list-item').style.display = 'none';
+                checkEmptyRequests();
+            });
+        });
+    })();
+</script>
+</body>
+</html>

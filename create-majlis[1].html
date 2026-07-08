@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নতুন মজলিস | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">নতুন মজলিস<span class="slogan">নয়া মজলিস বানাউক্কা</span></div>
+        <nav class="top-nav">
+            <a href="majlis.html">✕</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h3>আইকন বাছাই করো</h3>
+            <div class="icon-picker" id="iconPicker">
+                <span class="icon-option selected" data-icon="🏠">🏠</span>
+                <span class="icon-option" data-icon="📚">📚</span>
+                <span class="icon-option" data-icon="💻">💻</span>
+                <span class="icon-option" data-icon="🎭">🎭</span>
+                <span class="icon-option" data-icon="✈️">✈️</span>
+                <span class="icon-option" data-icon="🕌">🕌</span>
+                <span class="icon-option" data-icon="⚽">⚽</span>
+                <span class="icon-option" data-icon="🍲">🍲</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <label class="form-label">মজলিসের নাম *</label>
+            <input type="text" id="majlisName" placeholder="যেমন: জকিগঞ্জ মজলিস" class="form-input">
+
+            <label class="form-label">বিবরণ</label>
+            <textarea id="majlisDesc" placeholder="এই মজলিস কী নিয়ে, কাদের জন্য..." class="form-input" style="height:70px;"></textarea>
+
+            <label class="form-label">ক্যাটাগরি</label>
+            <select id="majlisCategory" class="form-input">
+                <option value="union">ইউনিয়ন-ভিত্তিক</option>
+                <option value="upazila">উপজেলা-ভিত্তিক</option>
+                <option value="district">জেলা-ভিত্তিক</option>
+                <option value="expatriate">প্রবাসী</option>
+                <option value="business">ব্যবসায়িক</option>
+                <option value="student">ছাত্র সংগঠন</option>
+                <option value="islamic">ইসলামিক</option>
+            </select>
+
+            <label class="form-label">গোপনীয়তা</label>
+            <div class="chip-rail" id="visibilityPicker" style="margin-top:4px;">
+                <div class="chip active" data-visibility="public">🌐 পাবলিক</div>
+                <div class="chip" data-visibility="private">🔒 প্রাইভেট</div>
+            </div>
+            <p style="font-size:11px; color:var(--text-soft); margin-top:6px;">প্রাইভেট মজলিসে যোগ দিতে অ্যাডমিনের অনুমোদন লাগবে।</p>
+        </div>
+
+        <button type="button" id="createMajlisBtn" class="primary-btn" style="width:100%;">➕ মজলিস তৈরি করো</button>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    let selectedIcon = '🏠';
+
+    document.querySelectorAll('#iconPicker .icon-option').forEach(function (el) {
+        el.addEventListener('click', function () {
+            document.querySelectorAll('#iconPicker .icon-option').forEach(function (o) { o.classList.remove('selected'); });
+            el.classList.add('selected');
+            selectedIcon = el.getAttribute('data-icon');
+        });
+    });
+
+    let selectedVisibility = 'public';
+    document.querySelectorAll('#visibilityPicker .chip').forEach(function (el) {
+        el.addEventListener('click', function () {
+            document.querySelectorAll('#visibilityPicker .chip').forEach(function (o) { o.classList.remove('active'); });
+            el.classList.add('active');
+            selectedVisibility = el.getAttribute('data-visibility');
+        });
+    });
+
+    document.getElementById('createMajlisBtn').addEventListener('click', function () {
+        const name = document.getElementById('majlisName').value.trim();
+        const desc = document.getElementById('majlisDesc').value.trim();
+        const category = document.getElementById('majlisCategory').value;
+
+        if (name === '') {
+            alert('দয়া করে মজলিসের নাম লিখুন!');
+            return;
+        }
+
+        const id = 'um' + Date.now();
+        const newMajlis = {
+            name: name,
+            icon: selectedIcon,
+            members: '১',
+            joined: true,
+            visibility: selectedVisibility,
+            category: category,
+            description: desc || 'এই মজলিস সম্পর্কে এখনো কোনো বিবরণ যোগ করা হয়নি।',
+            posts: []
+        };
+
+        const userMajlis = JSON.parse(localStorage.getItem('sylhetin_user_majlis') || '{}');
+        userMajlis[id] = newMajlis;
+        localStorage.setItem('sylhetin_user_majlis', JSON.stringify(userMajlis));
+        localStorage.setItem('sylhetin_joined_' + id, 'true');
+
+        window.location.href = 'majlis-detail.html?id=' + id;
+    });
+</script>
+</body>
+</html>

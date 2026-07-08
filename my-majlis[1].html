@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমার মজলিস | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">আমার মজলিস<span class="slogan">যেসব মজলিসে আফনে আছইন</span></div>
+        <nav class="top-nav">
+            <a href="more.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <a href="create-majlis.html" class="create-cta-btn">➕ নতুন মজলিস তৈরি করো</a>
+        <div class="card" id="myMajlisCard" style="padding:0;">
+            <!-- JS দিয়ে ভরা হবে -->
+        </div>
+        <div class="empty-note" id="emptyNote" style="display:none;">আফনে এখনো কোনো মজলিসে যোগ দেন নাই — মজলিস তালিকা থেকে পছন্দমতো মজলিসে যোগ দিন!</div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    (function () {
+        const allMajlis = (window.Sylhetin && window.Sylhetin.getAllMajlisData) ? window.Sylhetin.getAllMajlisData() : {};
+        const card = document.getElementById('myMajlisCard');
+        let html = '';
+        let count = 0;
+
+        Object.keys(allMajlis).forEach(function (id) {
+            const m = allMajlis[id];
+            const savedJoin = localStorage.getItem('sylhetin_joined_' + id);
+            const isJoined = savedJoin !== null ? (savedJoin === 'true') : !!m.joined;
+
+            if (isJoined) {
+                count++;
+                const iconStyle = m.logoImage ? `background-image:url('${m.logoImage}'); background-size:cover; background-position:center;` : '';
+                html += `
+                    <div class="majlis-item" data-majlis-id="${id}">
+                        <div class="majlis-icon" style="${iconStyle}">${m.logoImage ? '' : m.icon}</div>
+                        <div class="info">
+                            <div class="name">${m.name}</div>
+                            <div class="members">${m.members} জন সদস্য</div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        if (count === 0) {
+            card.style.display = 'none';
+            document.getElementById('emptyNote').style.display = 'block';
+        } else {
+            card.innerHTML = html;
+        }
+    })();
+</script>
+</body>
+</html>

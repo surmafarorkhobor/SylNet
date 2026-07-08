@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নতুন পোস্ট | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">নতুন পোস্ট<span class="slogan">নয়া কিতা অইলো?</span></div>
+        <nav class="top-nav">
+            <a href="index.html">✕</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <div class="post-head" style="padding:0 0 12px; cursor:default;">
+                <div class="user-avatar">👤</div>
+                <div class="meta">
+                    <div class="user-name">আপনি</div>
+                    <div class="post-time">ফেঞ্চুগঞ্জ ইউনিয়ন মজলিস</div>
+                </div>
+            </div>
+            <textarea id="postText" placeholder="আফনার মনর কতা এইঠে লেখউক্কা..." style="width: 100%; height: 90px;"></textarea>
+
+            <!-- ছবি প্রিভিউ -->
+            <div id="imagePreviewBox" style="display:none; margin-top:10px; position:relative;">
+                <img id="imagePreview" src="" style="width:100%; border-radius:var(--radius-sm); display:block;">
+                <button type="button" class="media-remove-btn" id="removeImageBtn">✕</button>
+            </div>
+
+            <!-- ভিডিও প্রিভিউ -->
+            <div id="videoPreviewBox" style="display:none; margin-top:10px; position:relative;">
+                <video id="videoPreview" src="" controls style="width:100%; border-radius:var(--radius-sm); display:block; background:#000;"></video>
+                <button type="button" class="media-remove-btn" id="removeVideoBtn">✕</button>
+            </div>
+
+            <!-- জরিপ (Poll) বিল্ডার -->
+            <div id="pollBuilderBox" style="display:none; margin-top:10px;">
+                <input type="text" id="pollQuestion" placeholder="জরিপর প্রশ্ন লেখউক্কা..." style="width:100%; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; font-family:inherit; font-size:13.5px; background:var(--bg); color:var(--text); margin-bottom:8px;">
+                <div id="pollOptionsList"></div>
+                <button type="button" id="addPollOptionBtn" style="border:1px dashed var(--border); background:none; color:var(--green-deep); font-weight:700; font-size:12.5px; padding:8px; width:100%; border-radius:var(--radius-sm); cursor:pointer; font-family:inherit;">➕ অপশন যোগ করো</button>
+                <button type="button" id="removePollBtn" class="media-remove-btn" style="position:static; margin-top:8px; width:100%; border-radius:var(--radius-sm); background:#E5484D;">✕ জরিপ বাদ দাও</button>
+            </div>
+
+            <input type="file" id="postImageInput" accept="image/*" style="display:none">
+            <input type="file" id="postVideoInput" accept="video/*" style="display:none">
+
+            <div class="composer-tools" style="display:flex; gap:16px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border);">
+                <label for="postImageInput" class="composer-tool-btn">🖼️ ছবি</label>
+                <label for="postVideoInput" class="composer-tool-btn">🎬 ভিডিও</label>
+                <span class="composer-tool-btn" id="pollToggleBtn">📊 জরিপ</span>
+            </div>
+
+            <br>
+            <button onclick="savePost()" class="primary-btn" style="width: 100%;">পোস্ট করুন</button>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    let selectedImageData = null;
+    let selectedVideoData = null;
+
+    function hideAllMediaBoxes() {
+        document.getElementById('imagePreviewBox').style.display = 'none';
+        document.getElementById('videoPreviewBox').style.display = 'none';
+        document.getElementById('pollBuilderBox').style.display = 'none';
+    }
+
+    // ---------- ছবি ----------
+    document.getElementById('postImageInput').addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            selectedVideoData = null;
+            document.getElementById('postVideoInput').value = '';
+            hideAllMediaBoxes();
+            selectedImageData = e.target.result;
+            document.getElementById('imagePreview').src = selectedImageData;
+            document.getElementById('imagePreviewBox').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+    document.getElementById('removeImageBtn').addEventListener('click', function () {
+        selectedImageData = null;
+        document.getElementById('postImageInput').value = '';
+        document.getElementById('imagePreviewBox').style.display = 'none';
+    });
+
+    // ---------- ভিডিও ----------
+    document.getElementById('postVideoInput').addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (file.size > 8 * 1024 * 1024) {
+            alert('দুঃখিত, ৮ MB-এর বেশি সাইজের ভিডিও এই ডেমোতে সাপোর্ট করে না।');
+            this.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            selectedImageData = null;
+            document.getElementById('postImageInput').value = '';
+            hideAllMediaBoxes();
+            selectedVideoData = e.target.result;
+            document.getElementById('videoPreview').src = selectedVideoData;
+            document.getElementById('videoPreviewBox').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+    document.getElementById('removeVideoBtn').addEventListener('click', function () {
+        selectedVideoData = null;
+        document.getElementById('postVideoInput').value = '';
+        document.getElementById('videoPreviewBox').style.display = 'none';
+    });
+
+    // ---------- জরিপ (Poll) ----------
+    function addPollOptionRow(value) {
+        const list = document.getElementById('pollOptionsList');
+        if (list.children.length >= 4) return;
+        const row = document.createElement('div');
+        row.className = 'poll-option-row';
+        row.innerHTML = `
+            <input type="text" class="poll-option-input" placeholder="অপশন" value="${value || ''}">
+            <span class="poll-option-remove">✕</span>
+        `;
+        row.querySelector('.poll-option-remove').addEventListener('click', function () {
+            if (list.children.length > 2) row.remove();
+        });
+        list.appendChild(row);
+    }
+
+    document.getElementById('pollToggleBtn').addEventListener('click', function () {
+        selectedImageData = null;
+        selectedVideoData = null;
+        document.getElementById('postImageInput').value = '';
+        document.getElementById('postVideoInput').value = '';
+        hideAllMediaBoxes();
+        document.getElementById('pollOptionsList').innerHTML = '';
+        addPollOptionRow('');
+        addPollOptionRow('');
+        document.getElementById('pollBuilderBox').style.display = 'block';
+    });
+
+    document.getElementById('addPollOptionBtn').addEventListener('click', function () {
+        addPollOptionRow('');
+    });
+
+    document.getElementById('removePollBtn').addEventListener('click', function () {
+        document.getElementById('pollBuilderBox').style.display = 'none';
+        document.getElementById('pollOptionsList').innerHTML = '';
+    });
+
+    // ---------- পোস্ট সেভ ----------
+    function savePost() {
+        const text = document.getElementById('postText').value.trim();
+        const pollVisible = document.getElementById('pollBuilderBox').style.display === 'block';
+
+        let pollData = null;
+        if (pollVisible) {
+            const question = document.getElementById('pollQuestion').value.trim();
+            const options = Array.from(document.querySelectorAll('.poll-option-input'))
+                .map(function (inp) { return inp.value.trim(); })
+                .filter(function (v) { return v !== ''; });
+            if (question === '' || options.length < 2) {
+                alert('জরিপর জন্য একটা প্রশ্ন আর কমপক্ষে দুইটা অপশন দেওয়া লাগবে!');
+                return;
+            }
+            pollData = { question: question, options: options };
+        }
+
+        if (text === "" && !selectedImageData && !selectedVideoData && !pollData) {
+            alert('দয়া করে কিছু লিখুন, ছবি/ভিডিও যোগ করুন, বা জরিপ বানান!');
+            return;
+        }
+
+        localStorage.setItem('myNewPost', text);
+        selectedImageData ? localStorage.setItem('myNewPostImage', selectedImageData) : localStorage.removeItem('myNewPostImage');
+        selectedVideoData ? localStorage.setItem('myNewPostVideo', selectedVideoData) : localStorage.removeItem('myNewPostVideo');
+        pollData ? localStorage.setItem('myNewPostPoll', JSON.stringify(pollData)) : localStorage.removeItem('myNewPostPoll');
+
+        window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>

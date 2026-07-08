@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মজলিস | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">মজলিস<span class="slogan">নিজর এলাকার মানুষ খুঁজি নাও</span></div>
+        <nav class="top-nav">
+            <a href="search.html">🔍</a>
+            <a href="profile.html">👤</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <a href="create-majlis.html" class="create-cta-btn">➕ নতুন মজলিস তৈরি করো</a>
+
+        <div class="chip-rail">
+            <div class="chip active">ইউনিয়ন</div>
+            <div class="chip">উপজেলা</div>
+            <div class="chip">জেলা</div>
+            <div class="chip">প্রবাসী</div>
+            <div class="chip">Business</div>
+            <div class="chip">Student</div>
+        </div>
+
+        <div class="card" id="majlisListCard">
+            <h3>জনপ্রিয় মজলিসসমূহ</h3>
+            <!-- JS দিয়ে ভরা হবে -->
+        </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    (function () {
+        const allMajlis = (window.Sylhetin && window.Sylhetin.getAllMajlisData) ? window.Sylhetin.getAllMajlisData() : {};
+        const card = document.getElementById('majlisListCard');
+        let html = '<h3>জনপ্রিয় মজলিসসমূহ</h3>';
+
+        Object.keys(allMajlis).forEach(function (id) {
+            const m = allMajlis[id];
+            const coverStyle = m.logoImage ? `background-image:url('${m.logoImage}'); background-size:cover; background-position:center;` : '';
+            html += `
+                <div class="majlis-item" data-majlis-id="${id}">
+                    <div class="majlis-icon" style="${coverStyle}">${m.logoImage ? '' : m.icon}</div>
+                    <div class="info">
+                        <div class="name">${m.name}</div>
+                        <div class="members">${m.members} জন সদস্য</div>
+                    </div>
+                    <button type="button" class="join-btn ${m.joined ? 'joined' : ''}">${m.joined ? '✅ যোগ দিছি' : 'যোগ করো'}</button>
+                </div>
+            `;
+        });
+
+        card.innerHTML = html;
+
+        if (window.Sylhetin && window.Sylhetin.restoreJoinStates) {
+            window.Sylhetin.restoreJoinStates(card);
+        }
+    })();
+</script>
+</body>
+</html>

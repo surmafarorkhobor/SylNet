@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নিউজ পেজ | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo" id="npLogo">নিউজ পেজ<span class="slogan" id="npSlogan">লোড হচ্ছে...</span></div>
+        <nav class="top-nav">
+            <a href="news.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container" id="npContainer">
+        <!-- JS দিয়ে ভরা হবে -->
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const pageId = params.get('id');
+        const allPages = (window.Sylhetin && window.Sylhetin.getAllNewsPagesData) ? window.Sylhetin.getAllNewsPagesData() : {};
+        const page = allPages[pageId];
+        const container = document.getElementById('npContainer');
+
+        if (!page) {
+            container.innerHTML = '<div class="card"><p>দুঃখিত, এই নিউজ পেজটি পাওয়া যায়নি।</p></div>';
+            return;
+        }
+
+        document.getElementById('npLogo').firstChild.textContent = page.name;
+        document.getElementById('npSlogan').textContent = (page.followers || '০') + ' ফলোয়ার';
+
+        const verifiedBadge = page.verified
+            ? '<span class="badge">✅ যাচাইকৃত</span>'
+            : (page.status === 'pending' ? '<span class="badge" style="background:#FFF3CD; color:#8A6D00;">⏳ পর্যালোচনাধীন</span>' : '');
+        const logoDisplay = page.logoImage ? '' : page.logo;
+
+        let html = `
+            <div class="profile-hero" data-entity-key="newspage-${pageId}" style="height:70px; margin-bottom:0;">
+                <button type="button" class="cover-edit-btn" title="কভার ফটো পাল্টাও">📷</button>
+                <div class="profile-avatar-big" style="width:60px; height:60px; font-size:22px; bottom:-26px;">
+                    ${logoDisplay}
+                    <button type="button" class="avatar-edit-btn" title="লোগো পাল্টাও">📷</button>
+                </div>
+                <input type="file" class="cover-file-input" accept="image/*" style="display:none">
+                <input type="file" class="avatar-file-input" accept="image/*" style="display:none">
+            </div>
+            <div class="card" style="margin-top:34px;">
+                <div class="majlis-item" style="border-bottom:none; padding:4px;">
+                    <div class="info">
+                        <div class="name" style="font-size:15px;">${page.name} ${verifiedBadge}</div>
+                        <div class="members">${page.pageType} · ${page.followers || '০'} ফলোয়ার</div>
+                    </div>
+                    <button type="button" class="follow-btn" data-user-id="${pageId}">👁️ ফলো</button>
+                </div>
+                <p style="font-size:12.5px; color:var(--text-soft); margin-top:10px; line-height:1.6;">${page.about}</p>
+                <p style="font-size:12px; color:var(--green-deep); margin-top:8px;">🔗 ${page.website}</p>
+            </div>
+
+            <div class="section-title-plain">সাম্প্রতিক খবর</div>
+        `;
+
+        const posts = page.posts || [];
+        if (posts.length === 0) {
+            html += '<div class="empty-note">এখনো কোনো খবর প্রকাশিত হয়নি।</div>';
+        }
+
+        posts.forEach(function (post) {
+            const fullPostId = pageId + '-' + post.id;
+            const reporterLine = post.reporterName ? ' · ' + post.reporterName : '';
+            html += `
+                <div class="card post" data-post-id="${fullPostId}">
+                    <div class="post-head" onclick="window.location.href='news-detail.html?id=${fullPostId}'" style="cursor:pointer;">
+                        <div class="user-avatar" style="border-radius:12px;">${page.logo}</div>
+                        <div class="meta">
+                            <div class="user-name">${page.name} ${verifiedBadge}</div>
+                            <div class="post-time">${post.category} · ${post.publishDate}${reporterLine}</div>
+                        </div>
+                    </div>
+                    <div onclick="window.location.href='news-detail.html?id=${fullPostId}'" style="cursor:pointer;">
+                        <p style="font-weight:700; font-size:14.5px; padding:0 16px 6px;">${post.headline}</p>
+                        <p style="padding:0 16px 12px; color:var(--text-soft);">${post.shortDescription}</p>
+                    </div>
+                    <div class="post-actions">
+                        <div class="reaction-wrap">
+                            <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
+                                <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
+                            </button>
+                            <div class="reaction-picker">
+                                <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
+                                <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
+                                <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
+                                <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
+                                <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
+                                <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
+                            </div>
+                        </div>
+                        <span class="comment-toggle">💬 কুনতা খও</span>
+                        <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+                    </div>
+                    <div class="comment-section">
+                        <ul class="comment-list"></ul>
+                        <div class="comment-input-row">
+                            <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                            <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                            <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
+                            <button type="button" class="comment-send-btn">➤</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+
+        container.querySelectorAll('.post[data-post-id]').forEach(function (postEl) {
+            if (window.Sylhetin) {
+                window.Sylhetin.renderCommentsFor(postEl);
+                window.Sylhetin.renderShareCountFor(postEl);
+            }
+        });
+
+        if (window.Sylhetin && window.Sylhetin.applyEntityPhotos) {
+            window.Sylhetin.applyEntityPhotos(document);
+        }
+    })();
+</script>
+</body>
+</html>

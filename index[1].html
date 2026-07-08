@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sylhetin | আপনার ডিজিটাল ঘর</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">Sylhetin<span class="slogan">আমরা হখল ছিলটি</span></div>
+        <nav class="top-nav">
+            <a href="search.html">🔍</a>
+            <a href="chat.html">💬</a>
+            <a href="profile.html">👤</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="card post-input-box" onclick="window.location.href='create-post.html'" style="cursor:pointer;">
+            <div class="user-avatar">👤</div>
+            <input type="text" placeholder="নয়া কিতা অইলো?" readonly style="cursor:pointer;">
+        </div>
+
+        <a href="news-detail.html?id=np1-a1" class="news-strip">
+            <span class="tag">খবর</span>
+            <span>শুরমাফারর খবর: সিলেটে আজ হালকা বৃষ্টির সম্ভাবনা</span>
+        </a>
+
+        <div class="chip-rail">
+            <div class="chip active">ফেঞ্চুগঞ্জ ইউনিয়ন</div>
+            <div class="chip">সিলেট জেলা</div>
+            <div class="chip">প্রবাসী মজলিস</div>
+        </div>
+
+        <div class="card post" data-post-id="p1">
+            <div class="post-head">
+                <div class="user-avatar">র</div>
+                <div class="meta">
+                    <div class="user-name">আব্দুর রাজ্জাক <span class="badge">যাচাইকৃত</span></div>
+                    <div class="post-time">২ ঘন্টা আগে</div>
+                </div>
+            </div>
+            <p>আজকের আবহাওয়াটা বেশ সুন্দর।</p>
+            <div class="post-actions">
+                <div class="reaction-wrap">
+                    <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
+                        <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
+                    </button>
+                    <div class="reaction-picker">
+                        <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
+                        <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
+                        <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
+                        <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
+                        <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
+                        <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
+                    </div>
+                </div>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
+                        <button type="button" class="comment-send-btn">➤</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card post" data-post-id="p2">
+            <div class="post-head">
+                <div class="user-avatar">আ</div>
+                <div class="meta">
+                    <div class="user-name">আরিফ চৌধুরী</div>
+                    <div class="post-time">৪ ঘন্টা আগে</div>
+                </div>
+            </div>
+            <p>সিলেটের চা বাগানের দৃশ্যগুলো সব সময় মন ভালো করে দেয়।</p>
+            <div class="post-actions">
+                <div class="reaction-wrap">
+                    <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
+                        <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
+                    </button>
+                    <div class="reaction-picker">
+                        <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
+                        <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
+                        <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
+                        <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
+                        <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
+                        <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
+                    </div>
+                </div>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
+                        <button type="button" class="comment-send-btn">➤</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>এনরে ছিনওনি?</h3>
+            <div class="people-rail">
+                <div class="person-card">
+                    <div class="user-avatar" style="width:56px;height:56px;font-size:20px;margin:0 auto 8px;">ম</div>
+                    <div class="p-name">মিজানুর রহমান</div>
+                    <div class="p-sub">বিয়ানীবাজার উপজেলা</div>
+                    <button class="join-btn">যোগ করো</button>
+                </div>
+                <div class="person-card">
+                    <div class="user-avatar" style="width:56px;height:56px;font-size:20px;margin:0 auto 8px;">ন</div>
+                    <div class="p-name">নাজমা আক্তার</div>
+                    <div class="p-sub">সিলেট জেলা</div>
+                    <button class="join-btn">যোগ করো</button>
+                </div>
+                <div class="person-card">
+                    <div class="user-avatar" style="width:56px;height:56px;font-size:20px;margin:0 auto 8px;">হ</div>
+                    <div class="p-name">হাসান আলী</div>
+                    <div class="p-sub">প্রবাসী মজলিস</div>
+                    <button class="join-btn">যোগ করো</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card post" data-post-id="p3">
+            <div class="post-head">
+                <div class="user-avatar">ছ</div>
+                <div class="meta">
+                    <div class="user-name">সাফিয়া বেগম</div>
+                    <div class="post-time">গতকাল</div>
+                </div>
+            </div>
+            <p>নতুন একটি সিলেটী কবিতার বই কিনলাম আজ, খুব ভালো লাগছে।</p>
+            <div class="post-actions">
+                <div class="reaction-wrap">
+                    <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
+                        <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
+                    </button>
+                    <div class="reaction-picker">
+                        <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
+                        <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
+                        <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
+                        <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
+                        <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
+                        <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
+                    </div>
+                </div>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
+                        <button type="button" class="comment-send-btn">➤</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    window.onload = function() {
+        const savedPost = localStorage.getItem('myNewPost');
+        const savedImage = localStorage.getItem('myNewPostImage');
+        const savedVideo = localStorage.getItem('myNewPostVideo');
+        const savedPollRaw = localStorage.getItem('myNewPostPoll');
+        const savedPoll = savedPollRaw ? JSON.parse(savedPollRaw) : null;
+
+        if (savedPost !== null && savedPost !== undefined && (savedPost !== '' || savedImage || savedVideo || savedPoll)) {
+            const postContainer = document.querySelector('.container');
+            const newId = 'new-' + Date.now();
+            const newCard = document.createElement('div');
+            newCard.className = 'card post';
+            newCard.setAttribute('data-post-id', newId);
+
+            const imageHtml = savedImage ? `<img src="${savedImage}" style="width:100%; display:block; margin-bottom:2px;">` : '';
+            const videoHtml = savedVideo ? `<video src="${savedVideo}" controls style="width:100%; display:block; margin-bottom:2px; background:#000;"></video>` : '';
+
+            let pollHtml = '';
+            if (savedPoll) {
+                let optionsHtml = '';
+                savedPoll.options.forEach(function (opt) {
+                    optionsHtml += `
+                        <button type="button" class="poll-option">
+                            <span class="poll-bar"></span>
+                            <span class="poll-option-content">
+                                <span class="poll-label">${opt}</span>
+                                <span class="poll-pct"></span>
+                            </span>
+                        </button>`;
+                });
+                pollHtml = `
+                    <div class="poll-box" data-poll-id="${newId}">
+                        <div class="poll-question">${savedPoll.question}</div>
+                        ${optionsHtml}
+                        <div class="poll-total"></div>
+                    </div>`;
+            }
+
+            newCard.innerHTML = `
+                <div class="post-head">
+                    <div class="user-avatar">👤</div>
+                    <div class="meta">
+                        <div class="user-name">আপনি (এখনই)</div>
+                        <div class="post-time">এইমাত্র</div>
+                    </div>
+                </div>
+                ${savedPost ? '<p>' + savedPost + '</p>' : ''}
+                ${imageHtml}
+                ${videoHtml}
+                ${pollHtml}
+                <div class="post-actions">
+                    <div class="reaction-wrap">
+                        <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
+                            <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
+                        </button>
+                        <div class="reaction-picker">
+                            <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
+                            <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
+                            <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
+                            <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
+                            <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
+                            <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
+                        </div>
+                    </div>
+                    <span class="comment-toggle">💬 কুনতা খও</span>
+                    <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+                </div>
+                <div class="comment-section">
+                    <ul class="comment-list"></ul>
+                    <div class="comment-input-row">
+                        <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                        <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                        <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
+                        <button type="button" class="comment-send-btn">➤</button>
+                    </div>
+                </div>
+            `;
+            postContainer.insertBefore(newCard, postContainer.children[3]);
+            localStorage.removeItem('myNewPost');
+            localStorage.removeItem('myNewPostImage');
+            localStorage.removeItem('myNewPostVideo');
+            localStorage.removeItem('myNewPostPoll');
+            if (window.Sylhetin && window.Sylhetin.renderCommentsFor) {
+                window.Sylhetin.renderCommentsFor(newCard);
+                window.Sylhetin.renderShareCountFor(newCard);
+            }
+            if (savedPoll && window.Sylhetin && window.Sylhetin.renderPollResults) {
+                window.Sylhetin.renderPollResults(newCard.querySelector('.poll-box'));
+            }
+        }
+    };
+</script>
+</body>
+</html>

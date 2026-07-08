@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিস্তারিত | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo" id="mdHeading">বিস্তারিত</div>
+        <nav class="top-nav">
+            <a href="more.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card" id="mdContent"></div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+</div>
+<script src="app.js?v=10"></script>
+<script>
+    const pages = {
+        settings: {
+            title: '⚙️ সেটিংস',
+            body: 'এখানে আপনি ভবিষ্যতে নোটিফিকেশন, অ্যাকাউন্ট তথ্য, থিম এবং অন্যান্য অ্যাপ সেটিংস নিয়ন্ত্রণ করতে পারবেন। এই ফিচারগুলো এখনো তৈরি হচ্ছে।'
+        },
+        privacy: {
+            title: '🔒 নিরাপত্তা ও গোপনীয়তা',
+            body: 'Sylhetin-এ "বাস্তব মানুষ, বাস্তব পরিচয়" নীতি অনুসরণ করা হয়। আপনার তথ্য কীভাবে সংরক্ষণ করা হয়, কে আপনার প্রোফাইল দেখতে পারবে, এবং অ্যাকাউন্ট সুরক্ষা সংক্রান্ত বিস্তারিত নিয়মাবলী শীঘ্রই এখানে যোগ করা হবে।'
+        },
+        about: {
+            title: 'ℹ️ আমাদের সম্পর্কে',
+            body: 'Sylhetin পৃথিবীর সব সিলেটি মানুষের নিজস্ব ডিজিটাল ঘর হিসেবে তৈরি হচ্ছে। এখানে মানুষ নিজের ভাষায় কথা বলবে, নিজের এলাকার মানুষকে খুঁজে পাবে, আর নিজের সংস্কৃতি ও পরিচয়কে ধারণ করবে। "আমরা হখল ছিলটি।"'
+        },
+        help: {
+            title: '❓ সাহায্য ও সহায়তা',
+            body: 'কোনো সমস্যা হলে বা মতামত জানাতে চাইলে আমাদের সাথে যোগাযোগ করুন। এই প্রোটোটাইপ পর্যায়ে সরাসরি সাপোর্ট চ্যানেল এখনো যুক্ত হয়নি, শীঘ্রই যোগ করা হবে।'
+        }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
+    const data = pages[type];
+    const content = document.getElementById('mdContent');
+
+    if (data) {
+        document.getElementById('mdHeading').textContent = data.title;
+        content.innerHTML = '<p style="font-size:13px; line-height:1.75; color:var(--text);">' + data.body + '</p>';
+    } else {
+        content.innerHTML = '<p>পেজটি পাওয়া যায়নি।</p>';
+    }
+</script>
+</body>
+</html>
