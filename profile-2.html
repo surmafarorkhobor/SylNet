@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রোফাইল | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=13">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">প্রোফাইল<span class="slogan" id="pfSlogan">আফনার পরিচয়</span></div>
+        <nav class="top-nav">
+            <a href="index.html">🏠</a>
+        </nav>
+    </header>
+
+    <main class="container" id="pfContainer">
+        <!-- JS দিয়ে ভরা হবে -->
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=13"></script>
+<script>
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('id') || 'u1';
+        const users = (window.Sylhetin && window.Sylhetin.usersData) || {};
+        const user = users[userId];
+        const container = document.getElementById('pfContainer');
+
+        if (!user) {
+            container.innerHTML = '<div class="card"><p>দুঃখিত, এই প্রোফাইলটি পাওয়া যায়নি।</p></div>';
+            return;
+        }
+
+        document.getElementById('pfSlogan').textContent = user.isMe ? 'আফনার পরিচয়' : user.name + '-র প্রোফাইল';
+
+        const heroStyle = user.isMe
+            ? "background-image:url('assets/images/profile-cover.jpg'); background-size:cover; background-position:center;"
+            : '';
+        const avatarStyle = user.isMe
+            ? "background-image:url('assets/images/profile-avatar.jpg'); background-size:cover; background-position:center;"
+            : '';
+        const avatarInner = user.isMe ? '' : user.avatarText;
+
+        const editButtons = user.isMe ? `
+            <button type="button" class="cover-edit-btn" title="কভার ফটো পাল্টাও">📷</button>
+            <button type="button" class="avatar-edit-btn" title="প্রোফাইল ফটো পাল্টাও" style="position:absolute; right:-2px; bottom:-2px; z-index:2;">📷</button>
+            <input type="file" class="cover-file-input" accept="image/*" style="display:none">
+            <input type="file" class="avatar-file-input" accept="image/*" style="display:none">
+        ` : '';
+
+        const actionButtons = user.isMe ? '' : `
+            <div class="profile-actions">
+                <button type="button" class="friend-btn" data-user-id="${userId}">➕ ফ্রেন্ড রিকোয়েস্ট</button>
+                <button type="button" class="follow-btn" data-user-id="${userId}">👁️ ফলো</button>
+                ${user.chatId ? `<button type="button" class="message-btn" onclick="window.location.href='chat-room.html?id=${user.chatId}'">💬 মেসেজ</button>` : '<button type="button" class="message-btn" disabled style="opacity:0.5;">💬 মেসেজ</button>'}
+            </div>
+        `;
+
+        container.innerHTML = `
+            <div class="profile-hero" data-entity-key="profile-${userId}" style="${heroStyle}">
+                ${editButtons}
+                <div class="profile-avatar-big" style="${avatarStyle}">${avatarInner}</div>
+            </div>
+
+            <div class="card">
+                <div class="profile-info">
+                    <h2>${user.name}</h2>
+                    <p>${user.bio}</p>
+                    <div class="profile-stats">
+                        <span><strong>${user.posts}</strong>পোস্ট</span>
+                        <span><strong>${user.followers}</strong>অনুসারী</span>
+                        <span><strong>${user.majlisCount}</strong>মজলিস</span>
+                    </div>
+                    ${actionButtons}
+                </div>
+            </div>
+
+            <div class="card profile-fields">
+                <h3>পরিচিতি</h3>
+                <div class="pfield"><div class="k">দেশ</div><div class="v">${user.country}</div></div>
+                <div class="pfield"><div class="k">জেলা</div><div class="v">${user.district}</div></div>
+                <div class="pfield"><div class="k">উপজেলা</div><div class="v">${user.upazila}</div></div>
+                <div class="pfield"><div class="k">ইউনিয়ন</div><div class="v">${user.union}</div></div>
+                <div class="pfield"><div class="k">বর্তমান অবস্থান</div><div class="v">${user.location}</div></div>
+                <div class="pfield"><div class="k">পেশা</div><div class="v">${user.profession}</div></div>
+            </div>
+        `;
+
+        if (window.Sylhetin && window.Sylhetin.applyEntityPhotos) {
+            window.Sylhetin.applyEntityPhotos(document);
+        }
+    })();
+</script>
+</body>
+</html>
