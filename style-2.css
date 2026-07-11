@@ -1,0 +1,1088 @@
+/* ============================================
+   Sylhetin Design System — v1.0
+   "আমরা হখল ছিলটি"
+   ============================================ */
+
+:root{
+  --green:#0A8F5A;
+  --green-deep:#087A4C;
+  --green-tint:#E5F5EE;
+  --bg:#F7F9FB;
+  --card:#FFFFFF;
+  --text:#202124;
+  --text-soft:#6B7280;
+  --border:#E9ECEF;
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 1px 3px rgba(16,24,32,0.06);
+}
+
+*{ box-sizing:border-box; }
+
+body {
+  font-family: 'Noto Sans Bengali', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+
+a { color:inherit; }
+
+/* মূল র‍্যাপার — মোবাইল-ফার্স্ট, বড় স্ক্রিনে মাঝখানে বসবে */
+.page-wrap{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  background:var(--bg);
+  position:relative;
+  box-shadow:0 0 40px rgba(0,0,0,0.05);
+}
+
+/* ---------- হেডার ---------- */
+.app-header {
+    background: linear-gradient(135deg, #0A8F5A 0%, #0C7A4D 100%);
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    color:#fff;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing:0.2px;
+    display:flex;
+    flex-direction:column;
+    line-height:1.2;
+}
+
+.logo .slogan{
+  font-size:11px;
+  font-weight:500;
+  opacity:0.85;
+  margin-top:1px;
+}
+
+.top-nav { display:flex; align-items:center; }
+
+.top-nav span, .top-nav a {
+    margin-left: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+    width:36px; height:36px;
+    background:rgba(255,255,255,0.18);
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px;
+}
+
+/* ---------- মেইন কনটেইনার ---------- */
+.container {
+    padding: 14px 16px;
+    padding-bottom: 90px;
+}
+
+/* ---------- কার্ড ---------- */
+.card {
+    background: var(--card);
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border:1px solid var(--border);
+}
+
+.card h3{
+  font-size:14px;
+  margin:0 0 10px;
+  color:var(--text);
+}
+
+/* ---------- পোস্ট ইনপুট বক্স ---------- */
+.post-input-box {
+    display: flex;
+    align-items: center;
+    gap:10px;
+}
+
+.user-avatar{
+  width:40px; height:40px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0A8F5A,#0C7A4D);
+  color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px;
+  flex-shrink:0;
+}
+
+.post-input-box input {
+    border: none;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding: 10px 16px;
+    width: 100%;
+    outline: none;
+    font-family:inherit;
+    font-size:13.5px;
+    color:var(--text-soft);
+}
+
+/* ---------- খবর স্ট্রিপ (হোম) ---------- */
+.news-strip{
+  background:var(--green-tint);
+  border:1px solid #CFEEDD;
+  border-radius:14px;
+  padding:11px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+  font-size:12.5px;
+  color:var(--green-deep);
+  font-weight:600;
+  text-decoration:none;
+}
+.news-strip .tag{
+  background:var(--green); color:#fff;
+  font-size:10.5px; font-weight:700;
+  padding:4px 9px; border-radius:8px;
+  flex-shrink:0;
+}
+
+/* ---------- মজলিস চিপ রেইল ---------- */
+.chip-rail{
+  display:flex; gap:8px;
+  overflow-x:auto;
+  padding-bottom:4px;
+  margin-bottom:14px;
+}
+.chip-rail::-webkit-scrollbar{ display:none; }
+.chip{
+  flex-shrink:0;
+  background:var(--card);
+  border:1.5px solid var(--border);
+  padding:7px 14px;
+  border-radius:20px;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--text-soft);
+  white-space:nowrap;
+  cursor:pointer;
+}
+.chip.active{
+  background:var(--green);
+  border-color:var(--green);
+  color:#fff;
+}
+
+/* ---------- পোস্ট কার্ড ---------- */
+.post{ padding:0; overflow:hidden; }
+.post-head{
+  display:flex; align-items:center; gap:10px;
+  padding:14px 16px 8px;
+  cursor:pointer;
+}
+.post-head .meta{ flex:1; }
+.user-name {
+    font-weight: 700;
+    font-size:13.5px;
+    color:var(--text);
+}
+.post-time{
+  font-size:11px;
+  color:var(--text-soft);
+  margin-top:1px;
+}
+.badge{
+  background:var(--green-tint);
+  color:var(--green-deep);
+  font-size:9.5px;
+  font-weight:700;
+  padding:2px 7px;
+  border-radius:6px;
+  margin-left:6px;
+}
+.post p{
+  padding:0 16px 12px;
+  margin:0;
+  font-size:13.5px;
+  line-height:1.65;
+  color:var(--text);
+}
+.post-actions {
+    display:flex;
+    border-top: 1px solid var(--border);
+    color: var(--text-soft);
+    font-size: 12.5px;
+    font-weight:600;
+}
+.post-actions span{
+  flex:1;
+  text-align:center;
+  padding:11px 0;
+  cursor:pointer;
+}
+
+/* পোস্ট এখন overflow দেখাবে যাতে রিয়েকশন পিকার পপ-আপ কার্ডের বাইরে বসতে পারে */
+.post{ overflow:visible; }
+
+/* ---------- রিয়েকশন বাটন ---------- */
+.reaction-wrap{
+  flex:1;
+  position:relative;
+}
+.reaction-btn{
+  width:100%;
+  border:none;
+  background:none;
+  padding:11px 0;
+  font-family:inherit;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--text-soft);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+}
+.reaction-btn .r-emoji{ font-size:14px; }
+.reaction-btn.reacted{ color:var(--green-deep); }
+.reaction-btn.reacted[data-emoji="❤️"]{ color:#E5484D; }
+.reaction-btn.reacted[data-emoji="😂"]{ color:#D9A400; }
+.reaction-btn.reacted[data-emoji="😮"]{ color:#7C5CFC; }
+.reaction-btn.reacted[data-emoji="😢"]{ color:#3B82F6; }
+.reaction-btn.reacted[data-emoji="😡"]{ color:#E5484D; }
+
+.reaction-picker{
+  position:absolute;
+  left:50%;
+  bottom:100%;
+  transform:translate(-50%, 6px);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:30px;
+  padding:6px 8px;
+  display:flex;
+  gap:3px;
+  box-shadow:0 8px 20px rgba(16,24,32,0.16);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index:30;
+  white-space:nowrap;
+}
+.reaction-picker.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translate(-50%, 0);
+}
+.reaction-picker .r-item{
+  font-size:21px;
+  padding:3px;
+  border-radius:50%;
+  cursor:pointer;
+  transition: transform 0.12s ease;
+  display:inline-block;
+}
+.reaction-picker .r-item:hover{
+  transform:translateY(-5px) scale(1.15);
+}
+
+/* ---------- এনরে ছিনওনি? (People You May Know) ---------- */
+.people-rail{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.people-rail::-webkit-scrollbar{ display:none; }
+.person-card{
+  flex-shrink:0;
+  width:112px;
+  text-align:center;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:14px 8px;
+  cursor:pointer;
+}
+.person-card .p-name{
+  font-size:12px;
+  font-weight:700;
+  color:var(--text);
+  line-height:1.3;
+}
+.person-card .p-sub{
+  font-size:10.5px;
+  color:var(--text-soft);
+  margin:2px 0 8px;
+}
+.person-card .join-btn{
+  width:100%;
+  padding:6px 0;
+}
+
+/* ---------- কমেন্ট সেকশন ---------- */
+.comment-section{
+  border-top:1px solid var(--border);
+  padding:12px 16px 14px;
+  display:none;
+}
+.comment-section.show{ display:block; }
+
+.comment-list{
+  list-style:none;
+  margin:0 0 10px;
+  padding:0;
+}
+.comment-item{
+  display:flex;
+  gap:8px;
+  margin-bottom:8px;
+  align-items:flex-start;
+}
+.comment-item .bubble{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:8px 12px;
+  font-size:12.5px;
+  flex:1;
+  line-height:1.5;
+}
+.comment-item .bubble .c-name{
+  font-weight:700;
+  font-size:11.5px;
+  display:block;
+  margin-bottom:2px;
+  color:var(--green-deep);
+}
+
+.comment-input-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.comment-input-row input{
+  flex:1;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:9px 14px;
+  font-size:12.5px;
+  font-family:inherit;
+  background:var(--bg);
+  outline:none;
+  color:var(--text);
+}
+.comment-input-row input:focus{ border-color:var(--green); }
+.comment-send-btn{
+  border:none;
+  background:var(--green);
+  color:#fff;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  font-size:14px;
+  cursor:pointer;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.comment-send-btn:active{ background:var(--green-deep); }
+
+/* ---------- টোস্ট নোটিফিকেশন ---------- */
+.toast{
+  position:fixed;
+  bottom:88px;
+  left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:rgba(32,33,36,0.94);
+  color:#fff;
+  padding:10px 20px;
+  border-radius:24px;
+  font-size:12.5px;
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index:200;
+  white-space:nowrap;
+  max-width:90%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ---------- প্রোফাইল কভার/অ্যাভাটার ফটো এডিট ---------- */
+.profile-hero{
+  position:relative;
+  overflow:visible;
+  background-size:cover;
+  background-position:center;
+}
+.cover-edit-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.35);
+  color:#fff;
+  border:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  cursor:pointer;
+  z-index:2;
+}
+.profile-avatar-big{
+  background-size:cover;
+  background-position:center;
+  position:absolute;
+}
+.avatar-edit-btn{
+  position:absolute;
+  right:-2px;
+  bottom:-2px;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:var(--green);
+  color:#fff;
+  border:2px solid #fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  cursor:pointer;
+  z-index:2;
+}
+
+/* ---------- মেনু লিস্ট (মজলিস / আরও) ---------- */
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-list li {
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-size:13.5px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+.menu-list li:last-child{ border-bottom:none; }
+.menu-list li .sub{
+  font-size:11px;
+  color:var(--text-soft);
+  font-weight:500;
+  margin-top:2px;
+}
+
+.logout {
+    color: #E5484D;
+    font-weight: 700;
+}
+
+/* মজলিস গ্রুপ কার্ড */
+.majlis-item{
+  display:flex; align-items:center; gap:12px;
+  padding:12px 4px;
+  border-bottom:1px solid var(--border);
+}
+.majlis-item:last-child{ border-bottom:none; }
+.majlis-icon{
+  width:44px; height:44px;
+  border-radius:var(--radius-sm);
+  background:var(--green-tint);
+  display:flex; align-items:center; justify-content:center;
+  font-size:19px;
+  flex-shrink:0;
+}
+.majlis-item .info{ flex:1; }
+.majlis-item .info .name{ font-weight:700; font-size:13.5px; }
+.majlis-item .info .members{ font-size:11px; color:var(--text-soft); margin-top:2px; }
+.join-btn{
+  border:none;
+  background:var(--green);
+  color:#fff;
+  font-size:11.5px;
+  font-weight:700;
+  padding:7px 12px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.join-btn.joined{
+  background:var(--green-tint);
+  color:var(--green-deep);
+}
+
+/* ---------- খবর পেজ ---------- */
+.news-item {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor:pointer;
+}
+.news-item:last-child{ border-bottom:none; }
+
+.news-title {
+    font-weight: 700;
+    font-size:13.5px;
+    margin-bottom: 5px;
+    color:var(--text);
+}
+.news-item p{
+  font-size:12.5px;
+  color:var(--text-soft);
+  line-height:1.6;
+  margin:0;
+}
+.news-source{
+  font-size:11px;
+  color:var(--green-deep);
+  font-weight:700;
+  margin-bottom:6px;
+  display:block;
+}
+
+/* ---------- প্রোফাইল পেজ ---------- */
+.profile-hero{
+  height:90px;
+  border-radius:var(--radius);
+  background:linear-gradient(135deg,#0A8F5A,#0C7A4D);
+  margin-bottom:44px;
+  position:relative;
+}
+.profile-hero .profile-avatar-big{
+  width:80px; height:80px;
+  border-radius:50%;
+  background:#fff;
+  border:4px solid #fff;
+  position:absolute;
+  left:16px;
+  bottom:-38px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:30px;
+  color:var(--green);
+  font-weight:800;
+  box-shadow:0 4px 10px rgba(0,0,0,0.12);
+}
+
+.profile-info {
+    text-align: left;
+    padding: 6px 4px 4px;
+}
+.profile-info h2{
+  margin:0 0 4px;
+  font-size:18px;
+  font-weight:800;
+}
+.profile-info p{
+  margin:0;
+  font-size:12.5px;
+  color:var(--text-soft);
+  line-height:1.6;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+.profile-stats span strong{
+  color:var(--green-deep);
+  font-size:15px;
+  display:block;
+}
+.profile-stats span{
+  font-size:11.5px;
+  color:var(--text-soft);
+  text-align:center;
+}
+
+.profile-fields{ padding:0; }
+.pfield{
+  display:flex; justify-content:space-between;
+  padding:11px 4px;
+  border-bottom:1px solid var(--border);
+  font-size:12.5px;
+}
+.pfield:last-child{ border-bottom:none; }
+.pfield .k{ color:var(--text-soft); font-weight:600; }
+.pfield .v{ font-weight:700; color:var(--text); }
+
+/* ---------- পোস্ট তৈরির পেজ ---------- */
+textarea#postText{
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:13.5px;
+  resize:vertical;
+  background:var(--bg);
+  color:var(--text);
+}
+textarea#postText:focus{ outline:2px solid var(--green); outline-offset:1px; }
+
+.primary-btn{
+  border:none;
+  background:var(--green);
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+  border-radius:var(--radius-sm);
+  padding:12px 0;
+  cursor:pointer;
+  font-family:inherit;
+  transition:background 0.15s ease;
+}
+.primary-btn:hover{ background:var(--green-deep); }
+
+/* ---------- বটম নেভিগেশন ---------- */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform:translateX(-50%);
+    width: 100%;
+    max-width:480px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 16px;
+    z-index: 100;
+}
+
+.bottom-nav a {
+    text-decoration: none;
+    color: var(--text-soft);
+    font-size: 10.5px;
+    font-weight:600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:3px;
+    flex:1;
+}
+
+.bottom-nav a.active{ color:var(--green); }
+
+.bottom-nav a[href="create-post.html"]{
+  color:transparent;
+  font-size:0;
+}
+.bottom-nav a[href="create-post.html"]::before{
+  content:"➕";
+  width:36px; height:36px;
+  border-radius:12px;
+  background:var(--green);
+  color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px;
+  margin-top:-14px;
+  box-shadow:0 4px 10px rgba(10,143,90,0.35);
+}
+
+/* ---------- সার্চ পেজের সেকশন হেডিং ---------- */
+.section-title-plain{
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--text-soft);
+  margin:16px 4px 8px;
+}
+
+/* ---------- আরও পেজের মেনু আইটেম চেভরন ---------- */
+.menu-list li span{
+  color:var(--text-soft);
+  font-size:14px;
+}
+
+/* ---------- চ্যাট ইনবক্স ---------- */
+.chat-list-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 14px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
+.chat-list-item:last-child{ border-bottom:none; }
+.chat-list-item .info{ flex:1; min-width:0; }
+.chat-list-item .name{ font-weight:700; font-size:13.5px; }
+.chat-list-item .preview{
+  font-size:12px;
+  color:var(--text-soft);
+  margin-top:2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.chat-list-item .time{
+  font-size:11px;
+  color:var(--text-soft);
+  flex-shrink:0;
+}
+
+/* ---------- চ্যাট রুম (কনভারসেশন ভিউ) ---------- */
+.msg-row{
+  display:flex;
+  margin-bottom:10px;
+}
+.msg-row.them{ justify-content:flex-start; }
+.msg-row.me{ justify-content:flex-end; }
+
+.msg-bubble{
+  max-width:75%;
+  padding:9px 14px;
+  border-radius:16px;
+  font-size:13px;
+  line-height:1.5;
+  background:var(--card);
+  border:1px solid var(--border);
+  color:var(--text);
+}
+.msg-row.me .msg-bubble{
+  background:var(--green);
+  color:#fff;
+  border-color:var(--green);
+}
+.msg-bubble.voice{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.chat-input-bar{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:480px;
+  background:var(--card);
+  border-top:1px solid var(--border);
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:100;
+}
+.chat-input-bar input{
+  flex:1;
+  border:1px solid var(--border);
+  background:var(--bg);
+  border-radius:20px;
+  padding:9px 14px;
+  font-size:13px;
+  font-family:inherit;
+  color:var(--text);
+  outline:none;
+}
+.chat-input-bar input:focus{ border-color:var(--green); }
+.chat-input-bar .ci-icon{
+  font-size:19px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+.chat-input-bar #crSendBtn{
+  border:none;
+  background:var(--green);
+  color:#fff;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  font-size:15px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+/* ---------- পোস্ট কম্পোজার — মিডিয়া/জরিপ টুলস ---------- */
+.composer-tool-btn{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--text-soft);
+  cursor:pointer;
+}
+.media-remove-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.55);
+  color:#fff;
+  border:none;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.poll-option-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+}
+.poll-option-input{
+  flex:1;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:9px 12px;
+  font-family:inherit;
+  font-size:13px;
+  background:var(--bg);
+  color:var(--text);
+}
+.poll-option-remove{
+  width:28px;
+  height:28px;
+  flex-shrink:0;
+  border-radius:50%;
+  background:var(--bg);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  color:var(--text-soft);
+  cursor:pointer;
+}
+
+/* ---------- ফিডে জরিপ (Poll) দেখানো ---------- */
+.poll-box{
+  padding:14px 16px;
+}
+.poll-question{
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:10px;
+}
+.poll-option{
+  position:relative;
+  width:100%;
+  text-align:left;
+  border:1px solid var(--border);
+  background:var(--bg);
+  border-radius:var(--radius-sm);
+  padding:10px 12px;
+  font-family:inherit;
+  font-size:12.5px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:8px;
+  cursor:pointer;
+  overflow:hidden;
+}
+.poll-option:last-child{ margin-bottom:0; }
+.poll-option .poll-bar{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  background:var(--green-tint);
+  width:0%;
+  transition:width 0.3s ease;
+  z-index:0;
+}
+.poll-option.voted .poll-bar{ background:#CFEEDD; }
+.poll-option .poll-label,
+.poll-option .poll-pct{
+  position:relative;
+  z-index:1;
+}
+.poll-option-content{
+  display:flex;
+  justify-content:space-between;
+  position:relative;
+  z-index:1;
+}
+.poll-total{
+  font-size:11px;
+  color:var(--text-soft);
+  margin-top:2px;
+}
+
+/* ---------- প্রোফাইল অ্যাকশন বাটন (Friend/Follow/Message) ---------- */
+.profile-actions{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid var(--border);
+}
+.profile-actions button{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-sm);
+  padding:10px 6px;
+  font-family:inherit;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.profile-actions .friend-btn{
+  background:var(--green);
+  color:#fff;
+}
+.profile-actions .friend-btn.sent{
+  background:var(--green-tint);
+  color:var(--green-deep);
+}
+.profile-actions .follow-btn{
+  background:var(--bg);
+  border:1px solid var(--border) !important;
+  color:var(--text);
+}
+.profile-actions .follow-btn.following{
+  background:var(--green-tint);
+  color:var(--green-deep);
+  border-color:#CFEEDD !important;
+}
+.profile-actions .message-btn{
+  background:var(--bg);
+  border:1px solid var(--border) !important;
+  color:var(--text);
+}
+
+/* ---------- ভয়েস কমেন্ট রেকর্ড বাটন ---------- */
+.mic-btn{
+  font-size:19px;
+  cursor:pointer;
+  flex-shrink:0;
+  padding:0 2px;
+}
+.mic-btn.recording{
+  animation: mic-pulse 1s infinite;
+}
+@keyframes mic-pulse{
+  0%, 100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(1.15); }
+}
+
+/* ---------- কমেন্ট লিস্টে ভয়েস কমেন্ট বাবল ---------- */
+.comment-item .bubble.voice-comment{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.comment-item .bubble audio{
+  height:32px;
+  max-width:170px;
+}
+
+/* ---------- নতুন মজলিস/নিউজ পেজ তৈরির CTA বাটন ---------- */
+.create-cta-btn{
+  display:block;
+  text-align:center;
+  background:var(--green);
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  padding:12px;
+  border-radius:var(--radius-sm);
+  margin-bottom:14px;
+  text-decoration:none;
+}
+
+/* ---------- Create Majlis / Create News Page ফর্ম ---------- */
+.form-label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:var(--text-soft);
+  margin:12px 0 6px;
+}
+.form-label:first-child{ margin-top:0; }
+.form-input{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 12px;
+  font-family:inherit;
+  font-size:13px;
+  background:var(--bg);
+  color:var(--text);
+  outline:none;
+}
+.form-input:focus{ border-color:var(--green); }
+select.form-input{
+  appearance:none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B7280'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+}
+
+.icon-picker{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.icon-option{
+  width:44px;
+  height:44px;
+  border-radius:var(--radius-sm);
+  background:var(--bg);
+  border:2px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  cursor:pointer;
+}
+.icon-option.selected{
+  border-color:var(--green);
+  background:var(--green-tint);
+}
+
+/* ---------- ফ্রেন্ড রিকোয়েস্ট অ্যাকসেপ্ট/ডিক্লাইন বাটন ---------- */
+.request-accept-btn,
+.request-decline-btn{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:none;
+  font-size:14px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.request-accept-btn{
+  background:var(--green);
+  color:#fff;
+}
+.request-decline-btn{
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text-soft);
+}
