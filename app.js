@@ -108,12 +108,13 @@ const sylhetinNewsPagesData = {
     }
 };
 
-/** নিউজ পোস্ট আইডি (যেমন "np1-a1") দিয়ে খুঁজে পেজ ও পোস্ট বের করা */
+/** নিউজ পোস্ট আইডি (যেমন "np1-a1" বা "np1-extra-172...") দিয়ে খুঁজে পেজ ও পোস্ট বের করা */
 function findNewsPost(fullPostId) {
     const allPages = getAllNewsPagesData();
     for (const pageId in allPages) {
         const page = allPages[pageId];
-        const found = (page.posts || []).find(function (p) { return (pageId + '-' + p.id) === fullPostId; });
+        const combined = getNewsPagePosts(pageId, page);
+        const found = combined.find(function (p) { return p.fullId === fullPostId; });
         if (found) return { pageId: pageId, page: page, post: found };
     }
     return null;
@@ -137,6 +138,98 @@ function getUserNewsPagesData() {
 /** স্ট্যাটিক ডেমো নিউজ পেজ + ইউজারের তৈরি করা পেজ — দুটো মিলিয়ে একটা অবজেক্ট বানানো */
 function getAllNewsPagesData() {
     return Object.assign({}, sylhetinNewsPagesData, getUserNewsPagesData());
+}
+
+// ---------- ডেমো ইউজার প্রোফাইল ডেটা (profile.html-এর জন্য, ভবিষ্যতে আসল ইউজার আসার আগে) ----------
+const sylhetinUsersData = {
+    'u1': {
+        name: 'আব্দুর রাজ্জাক', avatarText: 'র', isMe: true,
+        bio: 'লেখক ও ভ্রমণপিপাসু। সিলেট আমার ভালোলাগার জায়গা।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'ফেঞ্চুগঞ্জ', union: 'মাইজগাঁও', location: 'ঢাকা', profession: 'লেখক',
+        posts: '১৫', followers: '১২০', majlisCount: '৩', chatId: 'c1'
+    },
+    'u2': {
+        name: 'আরিফ চৌধুরী', avatarText: 'আ',
+        bio: 'সিলেটের প্রকৃতি আর ছবি তোলা ভালোবাসি।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'সিলেট সদর', union: '—', location: 'সিলেট', profession: 'ফটোগ্রাফার',
+        posts: '৯', followers: '৮৪', majlisCount: '২', chatId: 'c2'
+    },
+    'u3': {
+        name: 'সাফিয়া বেগম', avatarText: 'ছ',
+        bio: 'বই পড়তে আর কবিতা লিখতে ভালো লাগে।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'বিয়ানীবাজার', union: '—', location: 'বিয়ানীবাজার', profession: 'শিক্ষিকা',
+        posts: '৬', followers: '৫৩', majlisCount: '২', chatId: 'c3'
+    },
+    'u4': {
+        name: 'রফিক আহমদ', avatarText: 'র',
+        bio: 'ফেঞ্চুগঞ্জ ইউনিয়নের একজন সক্রিয় সদস্য।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'ফেঞ্চুগঞ্জ', union: 'মাইজগাঁও', location: 'ফেঞ্চুগঞ্জ', profession: 'ব্যবসায়ী',
+        posts: '১১', followers: '৭২', majlisCount: '১', chatId: null
+    },
+    'u5': {
+        name: 'ছালমা বেগম', avatarText: 'ছ',
+        bio: 'বাড়ির উঠানের ছোট ছোট মুহূর্ত শেয়ার করতে ভালো লাগে।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'ফেঞ্চুগঞ্জ', union: 'মাইজগাঁও', location: 'ফেঞ্চুগঞ্জ', profession: 'গৃহিণী',
+        posts: '৪', followers: '৩১', majlisCount: '১', chatId: null
+    },
+    'u6': {
+        name: 'হাসান আলী', avatarText: 'হ',
+        bio: 'সৌদি আরবে প্রবাসী, প্রযুক্তি নিয়ে আগ্রহী।',
+        country: 'সৌদি আরব (প্রবাসী)', district: 'সিলেট', upazila: '—', union: '—', location: 'রিয়াদ', profession: 'ইঞ্জিনিয়ার',
+        posts: '৭', followers: '৯৮', majlisCount: '২', chatId: null
+    },
+    'u7': {
+        name: 'নাজমা আক্তার', avatarText: 'ন',
+        bio: 'সিলেটি সংস্কৃতি আর গান নিয়ে লেখালেখি করি।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'সিলেট সদর', union: '—', location: 'সিলেট', profession: 'সাংবাদিক',
+        posts: '১৩', followers: '১১০', majlisCount: '২', chatId: null
+    },
+    'u8': {
+        name: 'মিজানুর রহমান', avatarText: 'ম',
+        bio: 'বিয়ানীবাজার উপজেলার স্থানীয় সংগঠক।',
+        country: 'বাংলাদেশ', district: 'সিলেট', upazila: 'বিয়ানীবাজার', union: '—', location: 'বিয়ানীবাজার', profession: 'শিক্ষক',
+        posts: '৮', followers: '৬৫', majlisCount: '৩', chatId: null
+    }
+};
+
+/** নামের সাথে মিলিয়ে ইউজার আইডি বের করা (মজলিস পোস্টের author নাম থেকে প্রোফাইল লিংক করার জন্য) */
+function findUserIdByName(name) {
+    for (const uid in sylhetinUsersData) {
+        if (sylhetinUsersData[uid].name === name) return uid;
+    }
+    return null;
+}
+
+/** নির্দিষ্ট মজলিসে ইউজার যেসব নতুন পোস্ট যোগ করেছে (localStorage) — প্রতিটার নিজস্ব স্থায়ী id থাকে */
+function getExtraMajlisPosts(majlisId) {
+    return JSON.parse(localStorage.getItem('sylhetin_extra_posts_majlis_' + majlisId) || '[]');
+}
+
+/** কোনো মজলিসের সব পোস্ট — প্রতিটার সাথে fullId (data-post-id-এ ব্যবহারের জন্য) যুক্ত করে দেওয়া হয়
+ *  বেস পোস্টের id সবসময় "post-<ইনডেক্স>" (স্থায়ী, নতুন পোস্ট যোগ হলেও বদলায় না)
+ *  এক্সট্রা (ইউজারের যোগ করা) পোস্টের id তৈরির সময়ই বসানো থাকে (extra-<timestamp>) */
+function getMajlisPosts(majlisId, baseMajlis) {
+    const extra = getExtraMajlisPosts(majlisId);
+    const base = (baseMajlis.posts || []).map(function (p, i) {
+        return Object.assign({}, p, { id: 'post-' + i });
+    });
+    return extra.concat(base).map(function (p) {
+        return Object.assign({}, p, { fullId: majlisId + '-' + p.id });
+    });
+}
+
+/** নির্দিষ্ট নিউজ পেজে ইউজার যেসব নতুন পোস্ট যোগ করেছে (localStorage) — প্রতিটার নিজস্ব স্থায়ী id থাকে */
+function getExtraNewsPosts(pageId) {
+    return JSON.parse(localStorage.getItem('sylhetin_extra_posts_newspage_' + pageId) || '[]');
+}
+
+/** কোনো নিউজ পেজের সব পোস্ট — প্রতিটার সাথে fullId যুক্ত করে দেওয়া হয় */
+function getNewsPagePosts(pageId, basePage) {
+    const extra = getExtraNewsPosts(pageId);
+    const base = basePage.posts || [];
+    return extra.concat(base).map(function (p) {
+        return Object.assign({}, p, { fullId: pageId + '-' + p.id });
+    });
 }
 
 // ---------- মজলিস গ্রুপের তথ্য (majlis-detail.html ও search.html-এর জন্য) ----------
@@ -496,18 +589,19 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // ৬) পোস্টের লেখকের নাম/ছবিতে ক্লিক করলে প্রোফাইলে যাওয়া
-        const postHead = e.target.closest('.post-head');
+        // ৬) পোস্টের লেখকের নাম/ছবিতে ক্লিক করলে সেই ব্যক্তির প্রোফাইলে যাওয়া
+        // (নিউজ পেজের post-head-এ নিজস্ব onclick থাকে, data-user-id থাকে না, তাই এখানে হাত দেওয়া হয় না)
+        const postHead = e.target.closest('.post-head[data-user-id]');
         if (postHead) {
-            window.location.href = 'profile.html';
+            window.location.href = 'profile.html?id=' + postHead.getAttribute('data-user-id');
             return;
         }
 
-        // ৭) "এনরে ছিনওনি?" সেকশনে কারো নাম/ছবিতে ক্লিক করলে প্রোফাইলে যাওয়া
+        // ৭) "এনরে ছিনওনি?" সেকশনে কারো নাম/ছবিতে ক্লিক করলে সেই ব্যক্তির প্রোফাইলে যাওয়া
         // (তবে "যোগ করো" বাটনে ক্লিক করলে শুধু বাটনটাই টগল হবে, প্রোফাইলে যাবে না)
-        const personCard = e.target.closest('.person-card');
+        const personCard = e.target.closest('.person-card[data-user-id]');
         if (personCard && !e.target.closest('.join-btn')) {
-            window.location.href = 'profile.html';
+            window.location.href = 'profile.html?id=' + personCard.getAttribute('data-user-id');
             return;
         }
 
@@ -699,5 +793,9 @@ window.Sylhetin = {
     renderPollResults: renderPollResults,
     getAllMajlisData: getAllMajlisData,
     getAllNewsPagesData: getAllNewsPagesData,
-    applyEntityPhotos: applyEntityPhotos
+    applyEntityPhotos: applyEntityPhotos,
+    usersData: sylhetinUsersData,
+    findUserIdByName: findUserIdByName,
+    getMajlisPosts: getMajlisPosts,
+    getNewsPagePosts: getNewsPagePosts
 };
