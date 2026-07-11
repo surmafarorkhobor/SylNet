@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>খুঁজো | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=13">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">খুঁজো<span class="slogan">মজলিস, খবর খোঁজ করো</span></div>
+        <nav class="top-nav">
+            <a href="index.html">✕</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card" style="padding:10px 14px;">
+            <input type="text" id="searchInput" placeholder="মজলিস, মানুষ বা খবর খোঁজ করো..."
+                style="width:100%; border:none; outline:none; font-family:inherit; font-size:14px; background:none; color:var(--text);">
+        </div>
+
+        <div id="searchResults"></div>
+        <div class="empty-note" id="searchEmptyNote">টাইপ শুরু করুন মজলিস বা খবর খুঁজে পেতে</div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+</div>
+<script src="app.js?v=13"></script>
+<script>
+    const input = document.getElementById('searchInput');
+    const resultsBox = document.getElementById('searchResults');
+    const emptyNote = document.getElementById('searchEmptyNote');
+
+    input.focus();
+
+    input.addEventListener('input', function () {
+        const q = input.value.trim().toLowerCase();
+        resultsBox.innerHTML = '';
+
+        if (q === '') {
+            emptyNote.style.display = 'block';
+            emptyNote.textContent = 'টাইপ শুরু করুন মজলিস বা খবর খুঁজে পেতে';
+            return;
+        }
+
+        const majlisData = (window.Sylhetin && window.Sylhetin.getAllMajlisData && window.Sylhetin.getAllMajlisData()) || {};
+        const newsPagesData = (window.Sylhetin && window.Sylhetin.getAllNewsPagesData && window.Sylhetin.getAllNewsPagesData()) || {};
+
+        const majlisMatches = Object.keys(majlisData).filter(function (id) {
+            return majlisData[id].name.toLowerCase().includes(q);
+        });
+
+        // নিউজ পেজের নাম বা তার প্রতিটা পোস্টের হেডলাইন — দুটোতেই খোঁজা হবে
+        const newsPageMatches = Object.keys(newsPagesData).filter(function (id) {
+            return newsPagesData[id].name.toLowerCase().includes(q);
+        });
+        const newsPostMatches = [];
+        Object.keys(newsPagesData).forEach(function (pageId) {
+            newsPagesData[pageId].posts.forEach(function (post) {
+                if (post.headline.toLowerCase().includes(q)) {
+                    newsPostMatches.push({ pageId: pageId, page: newsPagesData[pageId], post: post });
+                }
+            });
+        });
+
+        if (majlisMatches.length === 0 && newsPageMatches.length === 0 && newsPostMatches.length === 0) {
+            emptyNote.style.display = 'block';
+            emptyNote.textContent = 'কিছু পাওয়া যায়নি — অন্য শব্দ দিয়ে চেষ্টা করুন';
+            return;
+        }
+        emptyNote.style.display = 'none';
+
+        let html = '';
+
+        if (majlisMatches.length > 0) {
+            html += '<div class="section-title-plain">👥 মজলিস</div><div class="card">';
+            majlisMatches.forEach(function (id) {
+                const m = majlisData[id];
+                html += `
+                    <div class="majlis-item" onclick="window.location.href='majlis-detail.html?id=${id}'" style="cursor:pointer;">
+                        <div class="majlis-icon">${m.icon}</div>
+                        <div class="info">
+                            <div class="name">${m.name}</div>
+                            <div class="members">${m.members} জন সদস্য</div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+
+        if (newsPageMatches.length > 0) {
+            html += '<div class="section-title-plain">📰 নিউজ পেজ</div><div class="card">';
+            newsPageMatches.forEach(function (id) {
+                const p = newsPagesData[id];
+                const badge = p.verified ? ' ✅' : '';
+                html += `
+                    <div class="majlis-item" onclick="window.location.href='news-page-detail.html?id=${id}'" style="cursor:pointer;">
+                        <div class="majlis-icon">${p.logo}</div>
+                        <div class="info">
+                            <div class="name">${p.name}${badge}</div>
+                            <div class="members">${p.followers} ফলোয়ার</div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+
+        if (newsPostMatches.length > 0) {
+            html += '<div class="section-title-plain">🔔 খবর</div><div class="card">';
+            newsPostMatches.forEach(function (m) {
+                html += `
+                    <div class="news-item" onclick="window.location.href='news-detail.html?id=${m.pageId}-${m.post.id}'">
+                        <span class="news-source">${m.page.name} · ${m.post.publishDate}</span>
+                        <div class="news-title">${m.post.headline}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+
+        resultsBox.innerHTML = html;
+    });
+</script>
+</body>
+</html>
