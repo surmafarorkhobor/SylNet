@@ -6,7 +6,7 @@
     <title>আরও | Sylhetin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <div class="page-wrap">
@@ -33,8 +33,10 @@
             <ul class="menu-list">
                 <li onclick="window.location.href='friends.html'">👥 বন্ধুরা <span>›</span></li>
                 <li onclick="window.location.href='my-majlis.html'">🏠 আমার মজলিস <span>›</span></li>
+                <li onclick="window.location.href='notifications.html'">🔔 নোটিফিকেশন <span>›</span></li>
+                <li onclick="window.location.href='saved.html'">🔖 সেভ করা পোস্ট <span>›</span></li>
                 <li onclick="window.location.href='more-detail.html?type=settings'">⚙️ সেটিংস <span>›</span></li>
-                <li onclick="window.location.href='more-detail.html?type=privacy'">🔒 নিরাপত্তা ও গোপনীয়তা <span>›</span></li>
+                <li onclick="window.location.href='privacy-settings.html'">🔒 নিরাপত্তা ও গোপনীয়তা <span>›</span></li>
                 <li onclick="window.location.href='more-detail.html?type=about'">ℹ️ আমাদের সম্পর্কে <span>›</span></li>
                 <li onclick="window.location.href='more-detail.html?type=help'">❓ সাহায্য ও সহায়তা <span>›</span></li>
                 <li class="logout" id="logoutBtn">🚪 লগ আউট</li>
@@ -53,7 +55,7 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
 <script>
     // ভাষা নির্বাচন
     const langChips = document.querySelectorAll('#langChips .chip');

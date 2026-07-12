@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সেভ করা পোস্ট | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=14">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">সেভ করা পোস্ট<span class="slogan">আফনার সেভ করা সব কিতা</span></div>
+        <nav class="top-nav">
+            <a href="more.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container" id="savedContainer">
+        <!-- JS দিয়ে ভরা হবে -->
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=14"></script>
+<script>
+    (function () {
+        const S = window.Sylhetin;
+        if (!S) return;
+
+        function isSaved(postId) {
+            return localStorage.getItem('sylhetin_saved_' + postId) === 'true';
+        }
+
+        let items = [];
+
+        // ১) বন্ধুদের ডেমো পোস্ট
+        const friendPosts = [
+            { postId: 'p1', userId: 'u1', avatarText: 'র', name: 'আব্দুর রাজ্জাক', badge: '<span class="badge">যাচাইকৃত</span>', metaLine: '২ ঘন্টা আগে', bodyText: 'আজকের আবহাওয়াটা বেশ সুন্দর।' },
+            { postId: 'p2', userId: 'u2', avatarText: 'আ', name: 'আরিফ চৌধুরী', metaLine: '৪ ঘন্টা আগে', bodyText: 'সিলেটের চা বাগানের দৃশ্যগুলো সব সময় মন ভালো করে দেয়।' },
+            { postId: 'p3', userId: 'u3', avatarText: 'ছ', name: 'সাফিয়া বেগম', metaLine: 'গতকাল', bodyText: 'নতুন একটি সিলেটী কবিতার বই কিনলাম আজ, খুব ভালো লাগছে।' }
+        ];
+        friendPosts.forEach(function (p) { if (isSaved(p.postId)) items.push(p); });
+
+        // ২) সব মজলিসের পোস্ট
+        const allMajlis = S.getAllMajlisData ? S.getAllMajlisData() : {};
+        Object.keys(allMajlis).forEach(function (majId) {
+            const m = allMajlis[majId];
+            const posts = S.getMajlisPosts ? S.getMajlisPosts(majId, m) : [];
+            posts.forEach(function (post) {
+                if (isSaved(post.fullId)) {
+                    items.push({
+                        postId: post.fullId,
+                        userId: S.findUserIdByName ? S.findUserIdByName(post.author) : null,
+                        avatarText: post.avatarLetter,
+                        name: post.author,
+                        badge: '<span class="badge">👥 মজলিস</span>',
+                        metaLine: post.time + ' · <a href="majlis-detail.html?id=' + majId + '" style="color:var(--green-deep); font-weight:600;">' + m.name + '</a>',
+                        bodyText: post.text
+                    });
+                }
+            });
+        });
+
+        // ৩) সব নিউজ পেজের পোস্ট
+        const allNewsPages = S.getAllNewsPagesData ? S.getAllNewsPagesData() : {};
+        Object.keys(allNewsPages).forEach(function (pageId) {
+            const page = allNewsPages[pageId];
+            const verifiedBadge = page.verified ? '<span class="badge">✅ যাচাইকৃত</span>' : '';
+            const posts = S.getNewsPagePosts ? S.getNewsPagePosts(pageId, page) : [];
+            posts.forEach(function (post) {
+                if (isSaved(post.fullId)) {
+                    items.push({
+                        postId: post.fullId,
+                        avatarText: page.logoImage ? '' : page.logo,
+                        avatarImage: page.logoImage,
+                        roundedSquare: true,
+                        name: page.name,
+                        badge: verifiedBadge,
+                        metaLine: post.category + ' · ' + post.publishDate,
+                        headline: post.headline,
+                        bodyText: post.shortDescription,
+                        headHref: 'news-page-detail.html?id=' + pageId,
+                        linkHref: 'news-detail.html?id=' + post.fullId
+                    });
+                }
+            });
+        });
+
+        const container = document.getElementById('savedContainer');
+        if (items.length === 0) {
+            container.innerHTML = '<div class="empty-note">এখনো কোনো পোস্ট সেভ করেন নাই — কোনো পোস্টের 🔖 আইকনে ক্লিক করে সেভ করুন।</div>';
+            return;
+        }
+
+        container.innerHTML = items.map(S.buildFeedCardHtml).join('');
+
+        container.querySelectorAll('.post[data-post-id]').forEach(function (postEl) {
+            S.renderCommentsFor(postEl);
+            S.renderShareCountFor(postEl);
+        });
+        S.restoreSaveStates(container);
+    })();
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@
     <title>নিউজ পেজ | Sylhetin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <div class="page-wrap">
@@ -33,7 +33,7 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
 <script>
     (function () {
         const params = new URLSearchParams(window.location.search);
@@ -121,6 +121,7 @@
                         </div>
                         <span class="comment-toggle">💬 কুনতা খও</span>
                         <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+                        <span class="save-btn" title="সেভ করো">🔖</span>
                     </div>
                     <div class="comment-section">
                         <ul class="comment-list"></ul>
@@ -146,6 +147,9 @@
 
         if (window.Sylhetin && window.Sylhetin.applyEntityPhotos) {
             window.Sylhetin.applyEntityPhotos(document);
+        }
+        if (window.Sylhetin && window.Sylhetin.restoreSaveStates) {
+            window.Sylhetin.restoreSaveStates(container);
         }
     })();
 </script>

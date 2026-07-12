@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নিরাপত্তা ও গোপনীয়তা | Sylhetin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=14">
+</head>
+<body>
+<div class="page-wrap">
+
+    <header class="app-header">
+        <div class="logo">নিরাপত্তা ও গোপনীয়তা<span class="slogan">কে কিতা দেখতাম পারবো, ঠিক করি লউক্কা</span></div>
+        <nav class="top-nav">
+            <a href="more.html">←</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="card privacy-group" data-setting="friend_request">
+            <h3>👥 কে ফ্রেন্ড রিকোয়েস্ট পাঠাইতে পারবো</h3>
+            <div class="privacy-options">
+                <label class="privacy-option"><input type="radio" name="friend_request" value="everyone"> সবাই</label>
+                <label class="privacy-option"><input type="radio" name="friend_request" value="friends_of_friends"> শুধু বন্ধুর বন্ধু</label>
+                <label class="privacy-option"><input type="radio" name="friend_request" value="no_one"> কেউ না</label>
+            </div>
+        </div>
+
+        <div class="card privacy-group" data-setting="message">
+            <h3>💬 কে মেসেজ পাঠাইতে পারবো</h3>
+            <div class="privacy-options">
+                <label class="privacy-option"><input type="radio" name="message" value="everyone"> সবাই</label>
+                <label class="privacy-option"><input type="radio" name="message" value="friends"> শুধু বন্ধুরা</label>
+                <label class="privacy-option"><input type="radio" name="message" value="no_one"> কেউ না</label>
+            </div>
+        </div>
+
+        <div class="card privacy-group" data-setting="see_profile">
+            <h3>👤 কে প্রোফাইল দেখতাম পারবো</h3>
+            <div class="privacy-options">
+                <label class="privacy-option"><input type="radio" name="see_profile" value="everyone"> সবাই</label>
+                <label class="privacy-option"><input type="radio" name="see_profile" value="friends"> শুধু বন্ধুরা</label>
+            </div>
+        </div>
+
+        <div class="card privacy-group" data-setting="see_posts">
+            <h3>📝 কে পোস্ট দেখতাম পারবো</h3>
+            <div class="privacy-options">
+                <label class="privacy-option"><input type="radio" name="see_posts" value="everyone"> সবাই</label>
+                <label class="privacy-option"><input type="radio" name="see_posts" value="friends"> শুধু বন্ধুরা</label>
+            </div>
+        </div>
+
+        <div class="card privacy-group" data-setting="comment">
+            <h3>💭 কে কমেন্ট করতাম পারবো</h3>
+            <div class="privacy-options">
+                <label class="privacy-option"><input type="radio" name="comment" value="everyone"> সবাই</label>
+                <label class="privacy-option"><input type="radio" name="comment" value="friends"> শুধু বন্ধুরা</label>
+            </div>
+        </div>
+
+        <div class="empty-note">এই সেটিংসগুলো এখন শুধু আফনার নিজের ব্রাউজারে সেভ থাকে (ডেমো) — আসল ব্যাকএন্ড আইলে এইটা সার্ভারে সেভ অইবো।</div>
+
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html">🏠 ঘর</a>
+        <a href="majlis.html">👥 মজলিস</a>
+        <a href="create-post.html">➕ পোস্ট</a>
+        <a href="news.html">🔔 খবর</a>
+        <a href="more.html">☰ আরও</a>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+</div>
+<script src="app.js?v=14"></script>
+<script>
+    const defaults = {
+        friend_request: 'everyone',
+        message: 'everyone',
+        see_profile: 'everyone',
+        see_posts: 'everyone',
+        comment: 'everyone'
+    };
+
+    const saved = JSON.parse(localStorage.getItem('sylhetin_privacy_settings') || '{}');
+
+    document.querySelectorAll('.privacy-group').forEach(function (group) {
+        const key = group.getAttribute('data-setting');
+        const value = saved[key] || defaults[key];
+        const radio = group.querySelector('input[value="' + value + '"]');
+        if (radio) radio.checked = true;
+
+        group.querySelectorAll('input[type="radio"]').forEach(function (input) {
+            input.addEventListener('change', function () {
+                const current = JSON.parse(localStorage.getItem('sylhetin_privacy_settings') || '{}');
+                current[key] = input.value;
+                localStorage.setItem('sylhetin_privacy_settings', JSON.stringify(current));
+                if (window.Sylhetin) window.Sylhetin.showToast('সেটিংস সেভ অইছে!');
+            });
+        });
+    });
+</script>
+</body>
+</html>

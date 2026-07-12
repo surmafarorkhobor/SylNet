@@ -200,6 +200,77 @@ function findUserIdByName(name) {
     return null;
 }
 
+// ---------- একটা পোস্ট কার্ডের HTML বানানোর জেনেরিক ফাংশন ----------
+// reusable for বন্ধুর পোস্ট, মজলিসের পোস্ট, নিউজ পেজের পোস্ট, সেভ করা পোস্ট — সব জায়গায়
+function buildFeedCardHtml(opts) {
+    const avatarHtml = opts.avatarImage
+        ? `<div class="user-avatar" style="background-image:url('${opts.avatarImage}'); background-size:cover; background-position:center;"></div>`
+        : `<div class="user-avatar" ${opts.roundedSquare ? 'style="border-radius:12px;"' : ''}>${opts.avatarText || '👤'}</div>`;
+
+    const bodyInner = opts.headline
+        ? `<p style="font-weight:700; font-size:14.5px; margin:0 0 6px;">${opts.headline}</p><p style="margin:0;">${opts.bodyText}</p>`
+        : `<p>${opts.bodyText}</p>`;
+    const bodyHtml = opts.linkHref
+        ? `<a href="${opts.linkHref}" style="display:block; color:inherit; text-decoration:none;">${bodyInner}</a>`
+        : bodyInner;
+
+    const mediaHtml = opts.imageHtml || '';
+    const userIdAttr = opts.userId ? ` data-user-id="${opts.userId}"` : '';
+
+    return `
+        <div class="card post" data-post-id="${opts.postId}">
+            <div class="post-head"${userIdAttr} ${opts.headHref ? `onclick="window.location.href='${opts.headHref}'" style="cursor:pointer;"` : ''}>
+                ${avatarHtml}
+                <div class="meta">
+                    <div class="user-name">${opts.name} ${opts.badge || ''}</div>
+                    <div class="post-time">${opts.metaLine}</div>
+                </div>
+            </div>
+            ${bodyHtml}
+            ${mediaHtml}
+            <div class="post-actions">
+                <div class="reaction-wrap">
+                    <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
+                        <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
+                    </button>
+                    <div class="reaction-picker">
+                        <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
+                        <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
+                        <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
+                        <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
+                        <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
+                        <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
+                    </div>
+                </div>
+                <span class="comment-toggle">💬 কুনতা খও</span>
+                <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
+                <span class="save-btn" title="সেভ করো">🔖</span>
+            </div>
+            <div class="comment-section">
+                <ul class="comment-list"></ul>
+                <div class="comment-input-row">
+                    <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
+                    <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
+                    <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
+                    <button type="button" class="comment-send-btn">➤</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/** পোস্ট সেভ করা আছে কিনা তার অবস্থা localStorage থেকে ফিরিয়ে এনে বাটনে বসানো */
+function restoreSaveStates(container) {
+    const scope = container || document;
+    scope.querySelectorAll('.post[data-post-id] .save-btn').forEach(function (btn) {
+        const postEl = btn.closest('.post');
+        const postId = postEl.getAttribute('data-post-id');
+        const saved = localStorage.getItem('sylhetin_saved_' + postId) === 'true';
+        btn.classList.toggle('saved', saved);
+        btn.textContent = saved ? '✅ সেভ করা হইছে' : '🔖 সেভ করো';
+    });
+}
+
 /** নির্দিষ্ট মজলিসে ইউজার যেসব নতুন পোস্ট যোগ করেছে (localStorage) — প্রতিটার নিজস্ব স্থায়ী id থাকে */
 function getExtraMajlisPosts(majlisId) {
     return JSON.parse(localStorage.getItem('sylhetin_extra_posts_majlis_' + majlisId) || '[]');
@@ -474,6 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // পেজ লোড হওয়ার সময় মজলিসের জয়েন অবস্থা ফিরিয়ে আনা
     restoreJoinStates();
+    restoreSaveStates();
 
     // পেজ লোড হওয়ার সময় প্রতিটা জরিপের ফলাফল দেখানো
     document.querySelectorAll('.poll-box[data-poll-id]').forEach(function (pollBox) {
@@ -517,6 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const commentToggle = e.target.closest('.comment-toggle');
         const commentSendBtn = e.target.closest('.comment-send-btn');
         const shareBtn = e.target.closest('.share-btn');
+        const saveBtn = e.target.closest('.save-btn');
 
         // ১) রিয়েকশন বাটনে ক্লিক করলে পিকার খোলা/বন্ধ করা
         if (reactBtn) {
@@ -586,6 +659,19 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem(key, count);
             renderShareCountFor(postEl);
             showToast('পোস্টটি শেয়ার অইছে!');
+            return;
+        }
+
+        // ৫ক) সেভ বাটনে ক্লিক করলে সেভ/আনসেভ টগল
+        if (saveBtn) {
+            const postEl = saveBtn.closest('.post');
+            const postId = postEl.getAttribute('data-post-id');
+            const key = 'sylhetin_saved_' + postId;
+            const isSaved = localStorage.getItem(key) === 'true';
+            localStorage.setItem(key, isSaved ? 'false' : 'true');
+            saveBtn.classList.toggle('saved', !isSaved);
+            saveBtn.textContent = !isSaved ? '✅ সেভ করা হইছে' : '🔖 সেভ করো';
+            showToast(!isSaved ? 'পোস্টটি সেভ করা হইছে!' : 'সেভ থাকি বাদ দেওয়া অইছে');
             return;
         }
 
@@ -797,5 +883,7 @@ window.Sylhetin = {
     usersData: sylhetinUsersData,
     findUserIdByName: findUserIdByName,
     getMajlisPosts: getMajlisPosts,
-    getNewsPagePosts: getNewsPagePosts
+    getNewsPagePosts: getNewsPagePosts,
+    buildFeedCardHtml: buildFeedCardHtml,
+    restoreSaveStates: restoreSaveStates
 };

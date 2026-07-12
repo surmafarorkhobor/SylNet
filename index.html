@@ -6,7 +6,7 @@
     <title>Sylhetin | আপনার ডিজিটাল ঘর</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=13">
+    <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <div class="page-wrap">
@@ -15,6 +15,7 @@
         <div class="logo">Sylhetin<span class="slogan">আমরা হখল ছিলটি</span></div>
         <nav class="top-nav">
             <a href="search.html">🔍</a>
+            <a href="notifications.html">🔔</a>
             <a href="chat.html">💬</a>
             <a href="profile.html">👤</a>
         </nav>
@@ -79,65 +80,11 @@
     <div class="toast" id="toast"></div>
 
 </div>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=14"></script>
 <script>
     // ---------- একটা পোস্ট কার্ডের HTML বানানোর জেনেরিক ফাংশন ----------
-    // reusable for বন্ধুর পোস্ট, মজলিসের পোস্ট, নিউজ পেজের পোস্ট — তিনটার জন্যই
-    function buildFeedCardHtml(opts) {
-        const avatarHtml = opts.avatarImage
-            ? `<div class="user-avatar" style="background-image:url('${opts.avatarImage}'); background-size:cover; background-position:center;"></div>`
-            : `<div class="user-avatar" ${opts.roundedSquare ? 'style="border-radius:12px;"' : ''}>${opts.avatarText || '👤'}</div>`;
-
-        const bodyInner = opts.headline
-            ? `<p style="font-weight:700; font-size:14.5px; margin:0 0 6px;">${opts.headline}</p><p style="margin:0;">${opts.bodyText}</p>`
-            : `<p>${opts.bodyText}</p>`;
-        const bodyHtml = opts.linkHref
-            ? `<a href="${opts.linkHref}" style="display:block; color:inherit; text-decoration:none;">${bodyInner}</a>`
-            : bodyInner;
-
-        const mediaHtml = opts.imageHtml || '';
-        const userIdAttr = opts.userId ? ` data-user-id="${opts.userId}"` : '';
-
-        return `
-            <div class="card post" data-post-id="${opts.postId}">
-                <div class="post-head"${userIdAttr} ${opts.headHref ? `onclick="window.location.href='${opts.headHref}'" style="cursor:pointer;"` : ''}>
-                    ${avatarHtml}
-                    <div class="meta">
-                        <div class="user-name">${opts.name} ${opts.badge || ''}</div>
-                        <div class="post-time">${opts.metaLine}</div>
-                    </div>
-                </div>
-                ${bodyHtml}
-                ${mediaHtml}
-                <div class="post-actions">
-                    <div class="reaction-wrap">
-                        <button type="button" class="reaction-btn" data-emoji="👍" data-label="ফছন অইছে">
-                            <span class="r-emoji">👍</span><span class="r-label">ফছন অইছে</span>
-                        </button>
-                        <div class="reaction-picker">
-                            <span class="r-item" data-emoji="👍" data-label="ফছন অইছে" title="ফছন অইছে">👍</span>
-                            <span class="r-item" data-emoji="❤️" data-label="ভালা লাগছে" title="ভালা লাগছে">❤️</span>
-                            <span class="r-item" data-emoji="😂" data-label="হা হা" title="হা হা">😂</span>
-                            <span class="r-item" data-emoji="😮" data-label="ছমতখার" title="ছমতখার">😮</span>
-                            <span class="r-item" data-emoji="😢" data-label="খশটো ফাইলাম" title="খশটো ফাইলাম">😢</span>
-                            <span class="r-item" data-emoji="😡" data-label="রাগ খরলাম" title="রাগ খরলাম">😡</span>
-                        </div>
-                    </div>
-                    <span class="comment-toggle">💬 কুনতা খও</span>
-                    <span class="share-btn">↗️ আরো মানরে দেখাউক্কা</span>
-                </div>
-                <div class="comment-section">
-                    <ul class="comment-list"></ul>
-                    <div class="comment-input-row">
-                        <div class="user-avatar" style="width:30px;height:30px;font-size:12px;">👤</div>
-                        <input type="text" class="comment-input" placeholder="আফনার মত কিতা?">
-                        <span class="mic-btn" title="ভয়েস কমেন্ট">🎤</span>
-                        <button type="button" class="comment-send-btn">➤</button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+    // reusable for বন্ধুর পোস্ট, মজলিসের পোস্ট, নিউজ পেজের পোস্ট — তিনটার জন্যই (এখন app.js-এ আছে)
+    const buildFeedCardHtml = window.Sylhetin.buildFeedCardHtml;
 
     function renderHomeFeed() {
         // ১) বন্ধুদের ডেমো পোস্ট
@@ -203,6 +150,9 @@
                 window.Sylhetin.renderShareCountFor(postEl);
             }
         });
+        if (window.Sylhetin && window.Sylhetin.restoreSaveStates) {
+            window.Sylhetin.restoreSaveStates(document);
+        }
     }
 
     renderHomeFeed();
